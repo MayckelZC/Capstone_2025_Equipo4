@@ -1,0 +1,116 @@
+/* Fondo general del ion-content */
+ion-content {
+    --background: #4CAF50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+}
+
+/* Contenedor para centrar el card */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 20px;
+}
+
+/* Card del formulario */
+ion-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px 20px;
+    text-align: center;
+}
+
+/* Título del formulario */
+.form-title {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Campos del formulario */
+ion-item {
+    --background: #f7f7f7;
+    --border-radius: 8px;
+    margin-bottom: 20px;
+    --padding-start: 15px;
+    --padding-end: 15px;
+}
+
+ion-icon {
+    color: #4CAF50;
+    /* Iconos en verde */
+}
+
+ion-label {
+    color: #4CAF50 !important;
+    /* Etiquetas en verde */
+    font-size: 16px;
+}
+
+ion-input {
+    --placeholder-color: #999;
+    color: #333;
+    font-size: 16px;
+}
+
+/* Botón de envío */
+.submit-button {
+    --background: #2196F3;
+    /* Azul */
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 20px;
+    height: 50px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:hover {
+    background-color: #1E88E5;
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+}
+
+/* Botón de limpiar */
+.clear-button {
+    --background: #333;
+    color: white;
+    margin-top: 10px;
+}
+
+/* Estilo para el enlace */
+.extra-options {
+    text-align: center;
+    margin-top: 25px;
+}
+
+a {
+    color: #4CAF50;
+    /* Verde */
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* Responsividad para pantallas más pequeñas */
+@media (max-width: 600px) {
+    ion-card {
+        padding: 20px;
+        width: 90%;
+    }
+}

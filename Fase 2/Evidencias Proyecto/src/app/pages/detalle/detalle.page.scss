@@ -1,0 +1,71 @@
+.content-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  
+  .pet-details-card,
+  .publisher-info-card {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #4caf50;
+    background-color: #ffffff;
+  }
+  
+  .pet-details-card ion-img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .pet-details-card ion-card-header,
+  .publisher-info-card ion-card-header {
+    background: #4caf50;
+    color: white;
+    padding: 12px;
+  }
+  
+  .pet-details-card ion-card-title,
+  .publisher-info-card ion-card-title {
+    color: white;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+  
+  .pet-details-card ion-card-content,
+  .publisher-info-card ion-card-content {
+    color: #333;
+    padding: 16px;
+    font-size: 0.9em;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .adopt-button {
+    background: #4caf50;
+    color: white;
+  }
+  
+  .share-button {
+    background: #28a745;
+    color: white;
+  }
+
+  .pet-details-card ion-card-subtitle {
+    color: white; /* Color blanco para el subtítulo */
+    font-size: 1.2em; /* Ajuste del tamaño para mejor visibilidad */
+    font-weight: bold; /* Negrita para destacar */
+    margin-top: 4px;
+  }
+  

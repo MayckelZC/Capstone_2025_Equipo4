@@ -1,0 +1,171 @@
+/* Estilo general del contenedor */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #4CAF50; /* Color de fondo verde */
+  padding: 20px;
+}
+
+/* Logo e imagen de la aplicación */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  width: 100px;
+  height: auto;
+  animation: fadeIn 1s ease-in-out; /* Animación al cargar */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título del formulario */
+.form-title {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+/* Card del formulario */
+ion-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  border: none; /* Eliminar bordes */
+}
+
+/* Estilos para el título */
+ion-title {
+  font-size: 22px;
+  color: #4CAF50;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Estilo de los campos de entrada */
+ion-item {
+  --background: #f7f7f7;
+  --border-radius: 12px;
+  margin-bottom: 20px; /* Incrementado para mayor separación */
+  --padding-start: 15px;
+  --padding-end: 15px;
+  border: none; /* Eliminar bordes adicionales */
+  box-shadow: none; /* Eliminar cualquier sombra */
+}
+
+ion-label {
+  color: #4CAF50 !important;
+  font-size: 16px;
+}
+
+ion-input {
+  --placeholder-color: #999;
+  color: #333;
+}
+
+ion-input:focus {
+  --background: #ffffff;
+  --border-color: #4CAF50;
+  outline: 2px solid #81C784; /* Resaltado accesible */
+  outline-offset: 2px;
+}
+
+ion-icon {
+  color: #4CAF50;
+}
+
+/* Estilo del checkbox */
+ion-checkbox {
+  --background: #ffffff;
+  --color-checked: #388E3C;
+  --checkmark-color: #ffffff;
+  --border-color: #388E3C;
+  border-radius: 4px; /* Bordes redondeados */
+  margin-right: 10px;
+  box-shadow: none; /* Eliminar sombras */
+}
+
+/* Botón de inicio de sesión */
+.login-button {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: none; /* Eliminar cualquier sombra */
+  border: none; /* Eliminar bordes */
+}
+
+.login-button:hover {
+  background-color: #45a049;
+  transition: background-color 0.3s ease;
+  box-shadow: none; /* Eliminar sombras en hover */
+}
+
+/* Quitar focos o bordes verdes adicionales */
+.login-button:focus,
+.login-button:active {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Texto adicional debajo del formulario */
+.extra-options {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.extra-options a {
+  color: #388E3C;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.extra-options a:hover {
+  text-decoration: none;
+  color: #2e7d32;
+  transition: color 0.3s ease;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 600px) {
+  ion-card {
+    padding: 15px;
+    width: 90%;
+  }
+}
+
+/* Estilos personalizados para alertas */
+.custom-alert {
+  --background: #4CAF50;
+  --color: white;
+}
+
+.custom-alert-button {
+  --background: #45a049;
+  --color: white;
+  --border-radius: 8px;
+}
