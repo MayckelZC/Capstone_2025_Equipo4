@@ -1,0 +1,25 @@
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  color: white;
+}
+
+ion-title {
+  color: white;
+}
+
+ion-list {
+  background: var(--ion-color-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+ion-item {
+  --background: var(--ion-color-light);
+  --border-radius: 10px;
+}
+
+ion-button {
+  --border-radius: 10px;
+  font-weight: bold;
+}

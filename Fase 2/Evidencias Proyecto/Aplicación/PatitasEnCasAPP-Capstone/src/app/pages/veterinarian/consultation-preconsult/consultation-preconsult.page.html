@@ -1,0 +1,367 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/veterinarian/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pre-Consulta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Cargando información...</p>
+  </div>
+
+  <!-- Contenido principal -->
+  <div *ngIf="!loading && pet" class="preconsult-container">
+    
+    <!-- Información de la mascota -->
+    <ion-card class="pet-card">
+      <ion-card-header>
+        <div class="pet-header">
+          <ion-avatar *ngIf="pet.urlImagen">
+            <img [src]="pet.urlImagen" alt="{{pet.nombre}}">
+          </ion-avatar>
+          <ion-avatar *ngIf="!pet.urlImagen" class="default-avatar">
+            <ion-icon name="paw"></ion-icon>
+          </ion-avatar>
+          <div class="pet-info">
+            <ion-card-title>{{pet.nombre || 'Sin nombre'}}</ion-card-title>
+            <ion-card-subtitle>
+              {{pet.tipoMascota || 'Desconocido'}} - {{pet.raza || 'Sin raza'}} - {{calculateAge()}}
+            </ion-card-subtitle>
+          </div>
+        </div>
+      </ion-card-header>
+      
+      <!-- Información adicional de la mascota -->
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="paw" color="primary"></ion-icon>
+                <div>
+                  <small>Tipo de Mascota</small>
+                  <p><strong>{{pet.tipoMascota || 'No especificado'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="resize" color="primary"></ion-icon>
+                <div>
+                  <small>Tamaño</small>
+                  <p><strong>{{pet.tamano || 'No especificado'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="hourglass" color="primary"></ion-icon>
+                <div>
+                  <small>Etapa de Vida</small>
+                  <p><strong>{{pet.etapaVida || 'No especificado'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="calendar" color="primary"></ion-icon>
+                <div>
+                  <small>Edad</small>
+                  <p><strong>{{calculateAge()}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="male-female" color="primary"></ion-icon>
+                <div>
+                  <small>Sexo</small>
+                  <p><strong>{{pet.sexo || 'No especificado'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="color-palette" color="primary"></ion-icon>
+                <div>
+                  <small>Color</small>
+                  <p><strong>{{pet.color || 'No especificado'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="cut" color="primary"></ion-icon>
+                <div>
+                  <small>Esterilizado</small>
+                  <p><strong>{{pet.esterilizado ? 'Sí' : 'No'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="info-item">
+                <ion-icon name="shield-checkmark" color="primary"></ion-icon>
+                <div>
+                  <small>Vacunas</small>
+                  <p><strong>{{pet.vacuna ? 'Al día' : 'Incompletas'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <div class="info-item">
+                <ion-icon name="medkit" color="primary"></ion-icon>
+                <div>
+                  <small>Desparasitado</small>
+                  <p><strong>{{pet.desparasitado ? 'Sí' : 'No'}}</strong></p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        
+        <!-- Personalidad y Compatibilidad -->
+        <div *ngIf="pet.buenoConNinos || pet.buenoConMascotas || pet.energetico || pet.tranquilo || pet.entrenadoEnCasa || pet.guardian" class="personality-section">
+          <h3>
+            <ion-icon name="happy" color="success"></ion-icon>
+            Personalidad y Compatibilidad
+          </h3>
+          <div class="personality-tags">
+            <ion-chip *ngIf="pet.buenoConMascotas" color="success">
+              <ion-icon name="paw"></ion-icon>
+              <ion-label>Bueno con mascotas</ion-label>
+            </ion-chip>
+            <ion-chip *ngIf="pet.guardian" color="tertiary">
+              <ion-icon name="shield"></ion-icon>
+              <ion-label>Guardián</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+        
+        <!-- Ubicación -->
+        <div *ngIf="pet.ciudad || pet.barrio" class="location-section">
+          <h3>
+            <ion-icon name="location" color="primary"></ion-icon>
+            Ubicación
+          </h3>
+          <p>
+            <ion-icon name="business" color="success"></ion-icon>
+            <strong>{{pet.ciudad || 'No especificada'}}</strong>
+            <span *ngIf="pet.barrio">, {{pet.barrio}}</span>
+          </p>
+        </div>
+        
+        <!-- Descripción de la mascota -->
+        <div *ngIf="pet.descripcion" class="pet-description">
+          <ion-icon name="information-circle" color="primary"></ion-icon>
+          <div>
+            <small>Descripción</small>
+            <p>{{pet.descripcion}}</p>
+          </div>
+        </div>
+        
+        <!-- Información del publicador -->
+        <div *ngIf="appointment.userName" class="owner-info">
+          <h3>
+            <ion-icon name="person" color="primary"></ion-icon>
+            Información del Dueño
+          </h3>
+          <div class="owner-details">
+            <p>
+              <ion-icon name="person-circle" color="medium"></ion-icon>
+              <strong>{{appointment.userName}}</strong>
+            </p>
+            <p *ngIf="appointment.userEmail">
+              <ion-icon name="mail" color="medium"></ion-icon>
+              {{appointment.userEmail}}
+            </p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Alertas importantes -->
+    <ion-card class="alert-card" *ngIf="pet.condicionesSalud || !pet.esterilizado || !pet.vacuna || hasOverdueVaccines()">
+      <ion-card-header>
+        <ion-card-title class="alert-title">
+          <ion-icon name="warning" color="danger"></ion-icon>
+          INFORMACIÓN IMPORTANTE
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Condiciones de salud -->
+        <div *ngIf="pet.condicionesSalud" class="alert-item">
+          <ion-icon name="medical" color="warning"></ion-icon>
+          <div>
+            <strong>Condiciones de salud:</strong>
+            <p>{{pet.condicionesSalud}}</p>
+          </div>
+        </div>
+
+        <!-- Esterilización -->
+        <div *ngIf="pet.esterilizado === false" class="alert-item">
+          <ion-icon name="heart-circle" color="tertiary"></ion-icon>
+          <div>
+            <strong>No esterilizado/a</strong>
+          </div>
+        </div>
+
+        <!-- Vacunas -->
+        <div *ngIf="pet.vacuna === false" class="alert-item">
+          <ion-icon name="shield-checkmark" color="danger"></ion-icon>
+          <div>
+            <strong>Vacunas incompletas</strong>
+          </div>
+        </div>
+
+        <!-- Vacunas vencidas -->
+        <div *ngIf="hasOverdueVaccines()" class="alert-item">
+          <ion-icon name="alert-circle" color="danger"></ion-icon>
+          <div>
+            <strong>Tiene vacunas vencidas</strong>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tipo de Atención -->
+    <ion-card *ngIf="appointment.appointmentType">
+      <ion-card-header>
+        <ion-card-title>Tipo de Atención</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="type-info">
+          <ion-chip class="appointment-type-chip" [style.--type-color]="getAppointmentType()?.color">
+            <ion-icon [name]="getAppointmentType()?.icon" [style.color]="getAppointmentType()?.color"></ion-icon>
+            <ion-label>
+              <strong>{{ getAppointmentType()?.name }}</strong>
+              <span class="duration">{{ appointment.estimatedDuration || 30 }} minutos</span>
+            </ion-label>
+          </ion-chip>
+          <p class="type-description">{{ getAppointmentType()?.description }}</p>
+        </div>
+        
+        <!-- Instrucciones de preparación -->
+        <ion-card class="preparation-instructions" *ngIf="hasPreparationInstructions()">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="alert-circle" color="warning"></ion-icon>
+              Instrucciones de Preparación
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ getAppointmentType()?.preparationInstructions }}</p>
+            <ion-note>Verificar que el dueño haya seguido estas instrucciones.</ion-note>
+          </ion-card-content>
+        </ion-card>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Motivo de la cita -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Motivo de la Consulta</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="reason-container">
+          <p><strong>{{appointment.reason || 'Chequeo general'}}</strong></p>
+          <p *ngIf="appointment.priority" class="priority">
+            Prioridad: <ion-badge [color]="appointment.priority === 'high' ? 'danger' : 'medium'">
+              {{appointment.priority === 'high' ? 'ALTA' : 'NORMAL'}}
+            </ion-badge>
+          </p>
+          <p *ngIf="appointment.notes" class="owner-notes">
+            <ion-icon name="chatbox-outline"></ion-icon>
+            <em>"{{appointment.notes}}"</em>
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Datos de última consulta -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Datos Previos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="data-item">
+                <ion-icon name="calendar-outline" color="primary"></ion-icon>
+                <div>
+                  <strong>Última visita</strong>
+                  <p>{{getLastVisit()}}</p>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="data-item">
+                <ion-icon name="scale-outline" color="primary"></ion-icon>
+                <div>
+                  <strong>Último peso</strong>
+                  <p>{{getLastWeight()}}</p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Historial reciente -->
+    <ion-card *ngIf="medicalHistory.length > 0">
+      <ion-card-header>
+        <ion-card-title>Historial Reciente</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let record of medicalHistory.slice(0, 3)" lines="full">
+            <ion-icon 
+              [name]="record.type === 'emergency' ? 'alert-circle' : record.type === 'surgery' ? 'cut' : 'fitness'" 
+              slot="start"
+              [color]="record.type === 'emergency' ? 'danger' : 'primary'">
+            </ion-icon>
+            <ion-label>
+              <h3>{{record.diagnosis || 'Sin diagnóstico'}}</h3>
+              <p>{{record.date?.toDate ? (record.date.toDate() | date:'dd/MM/yyyy') : (record.date | date:'dd/MM/yyyy')}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" fill="clear" (click)="viewFullHistory()">
+          Ver historial completo
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="!loading">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" fill="outline" color="medium">
+        Cancelar
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="startConsultation()" fill="solid" color="primary" class="start-button">
+        <ion-icon name="medical" slot="start"></ion-icon>
+        Iniciar Consulta
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

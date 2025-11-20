@@ -1,0 +1,153 @@
+{
+  "name": "Patitas en Casa",
+  "short_name": "PatitasApp",
+  "description": "Aplicación para adopción de mascotas que conecta a adoptantes con rescatistas y organizaciones",
+  "theme_color": "#4CAF50",
+  "background_color": "#FAFAFA",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "start_url": "./",
+  "categories": ["pets", "social", "lifestyle"],
+  "lang": "es-ES",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "assets/icon/favicon.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Buscar Mascotas",
+      "short_name": "Buscar",
+      "description": "Buscar mascotas disponibles para adopción",
+      "url": "/home?shortcut=search",
+      "icons": [
+        {
+          "src": "assets/icon/search-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Mis Mascotas",
+      "short_name": "Mis Mascotas",
+      "description": "Ver mis mascotas adoptadas",
+      "url": "/mis-mascotas-adoptadas?shortcut=my-pets",
+      "icons": [
+        {
+          "src": "assets/icon/pets-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Publicar Adopción",
+      "short_name": "Publicar",
+      "description": "Publicar una nueva mascota en adopción",
+      "url": "/crearadopcion?shortcut=create",
+      "icons": [
+        {
+          "src": "assets/icon/create-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/home-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Página principal de Patitas en Casa"
+    },
+    {
+      "src": "assets/screenshots/home-narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vista móvil de la página principal"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.patitasencasa.app"
+    }
+  ],
+  "share_target": {
+    "action": "/share-adoption",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+patitas",
+      "url": "/?protocol=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/upload-pet-image",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif"]
+      }
+    }
+  ]
+}

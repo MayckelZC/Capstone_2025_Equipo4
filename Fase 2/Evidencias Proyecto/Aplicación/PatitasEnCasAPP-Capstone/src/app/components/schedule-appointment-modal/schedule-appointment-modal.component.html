@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Agendar Cita Veterinaria</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="pet-info">
+    <ion-icon name="paw" class="paw-icon"></ion-icon>
+    <h2>{{ petName }}</h2>
+    <p class="subtitle">Consulta inicial gratuita - Convenio veterinaria</p>
+  </div>
+
+  <form class="appointment-form">
+    <!-- Sección de Tipo de Atención -->
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="medical" color="primary"></ion-icon>
+        <h3>Tipo de atención</h3>
+      </div>
+      
+      <div class="appointment-types">
+        <ion-chip 
+          *ngFor="let type of appointmentTypes"
+          [class.selected-type]="selectedAppointmentType?.id === type.id"
+          (click)="selectAppointmentType(type)"
+          [style.--chip-color]="type.color"
+        >
+          <ion-icon [name]="type.icon" [style.color]="type.color"></ion-icon>
+          <ion-label>
+            <strong>{{ type.name }}</strong>
+            <span class="type-duration">{{ type.duration }} min</span>
+          </ion-label>
+        </ion-chip>
+      </div>
+      
+      <!-- Descripción del tipo seleccionado -->
+      <div class="type-description" *ngIf="selectedAppointmentType">
+        <ion-icon name="information-circle" [style.color]="selectedAppointmentType.color"></ion-icon>
+        <p>{{ selectedAppointmentType.description }}</p>
+      </div>
+      
+      <!-- Instrucciones de preparación si aplica -->
+      <ion-card class="preparation-card" *ngIf="selectedAppointmentType?.requiresPreparation">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="alert-circle" color="warning"></ion-icon>
+            Preparación requerida
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ selectedAppointmentType.preparationInstructions }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Sección de Fecha -->
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="calendar" color="primary"></ion-icon>
+        <h3>Selecciona la fecha</h3>
+      </div>
+      
+      <ion-datetime
+        presentation="date"
+        [(ngModel)]="selectedDate"
+        [min]="minDate"
+        [max]="maxDate"
+        (ionChange)="onDateChange()"
+        name="date"
+        locale="es-ES"
+        [firstDayOfWeek]="1"
+        class="custom-datetime"
+        cancelText="Cancelar"
+        doneText="Confirmar"
+      ></ion-datetime>
+    </div>
+
+    <!-- Sección de Horarios -->
+    <div class="form-section" *ngIf="selectedDate">
+      <div class="section-header">
+        <ion-icon name="time" color="primary"></ion-icon>
+        <h3>Selecciona el horario</h3>
+      </div>
+
+      <div class="time-info" *ngIf="getMorningSlots().length === 0 && getAfternoonSlots().length === 0">
+        <ion-icon name="information-circle" color="warning"></ion-icon>
+        <p>No hay horarios disponibles para esta fecha</p>
+      </div>
+
+      <div class="time-slots" *ngIf="getMorningSlots().length > 0 || getAfternoonSlots().length > 0">
+        <div class="time-slot-group" *ngIf="getMorningSlots().length > 0">
+          <p class="time-period">Mañana</p>
+          <div class="slots-row">
+            <ion-chip
+              *ngFor="let slot of getMorningSlots()"
+              color="medium"
+              (click)="selectTimeSlot(slot)"
+              [class.selected]="selectedTimeSlot === slot"
+            >
+              <ion-icon *ngIf="selectedTimeSlot === slot" name="checkmark-circle" slot="start"></ion-icon>
+              <ion-label>{{ slot }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+
+        <div class="time-slot-group" *ngIf="getAfternoonSlots().length > 0">
+          <p class="time-period">Tarde</p>
+          <div class="slots-row">
+            <ion-chip
+              *ngFor="let slot of getAfternoonSlots()"
+              color="medium"
+              (click)="selectTimeSlot(slot)"
+              [class.selected]="selectedTimeSlot === slot"
+            >
+              <ion-icon *ngIf="selectedTimeSlot === slot" name="checkmark-circle" slot="start"></ion-icon>
+              <ion-label>{{ slot }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Motivo -->
+    <div class="form-section" *ngIf="selectedTimeSlot">
+      <div class="section-header">
+        <ion-icon name="create" color="primary"></ion-icon>
+        <h3>Motivo de la consulta (opcional)</h3>
+      </div>
+      
+      <ion-item lines="none" class="textarea-item">
+        <ion-textarea
+          [(ngModel)]="reason"
+          name="reason"
+          [placeholder]="'Agrega detalles adicionales sobre ' + (selectedAppointmentType?.name || 'la consulta') + '...'"
+          rows="4"
+          [counter]="true"
+          maxlength="300"
+        ></ion-textarea>
+      </ion-item>
+      
+      <ion-note class="helper-text">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        Si no agregas detalles, se usará "{{selectedAppointmentType?.name}}" como motivo.
+      </ion-note>
+    </div>
+  </form>
+
+  <div class="info-box">
+    <ion-icon name="information-circle" color="primary"></ion-icon>
+    <div>
+      <p class="info-title">Información importante</p>
+      <p class="info-text">La cita será confirmada por el veterinario. Te notificaremos cuando esté confirmada.</p>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      (click)="scheduleAppointment()"
+      [disabled]="!selectedAppointmentType || !selectedDate || !selectedTimeSlot"
+      size="large"
+    >
+      <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+      Confirmar Cita
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

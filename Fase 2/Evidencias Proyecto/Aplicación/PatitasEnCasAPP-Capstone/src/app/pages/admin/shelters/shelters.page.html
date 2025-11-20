@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Refugios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addShelter()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let shelter of shelters">
+      <ion-item>
+        <ion-label>
+          <h2>{{ shelter.name }}</h2>
+          <p>{{ shelter.address }}</p>
+          <p>{{ shelter.phone }}</p>
+          <p>{{ shelter.email }}</p>
+          <p>{{ shelter.website }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="editShelter(shelter)" color="primary">Editar</ion-item-option>
+        <ion-item-option (click)="deleteShelter(shelter.id)" color="danger">Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

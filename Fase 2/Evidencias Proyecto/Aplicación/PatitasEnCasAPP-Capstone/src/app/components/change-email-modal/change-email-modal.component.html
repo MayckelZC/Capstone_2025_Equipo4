@@ -1,0 +1,301 @@
+<div class="modal-header">
+  <div class="header-content">
+    <ion-icon name="mail-outline" class="header-icon"></ion-icon>
+    <h2>Cambiar Email</h2>
+    <p class="header-subtitle">Tu seguridad es importante para nosotros</p>
+  </div>
+  <ion-button fill="clear" (click)="dismiss()" class="close-btn">
+    <ion-icon name="close" slot="icon-only"></ion-icon>
+  </ion-button>
+</div>
+
+<ion-content class="modal-content">
+  <!-- Paso 1: Ingresar credenciales -->
+  <div *ngIf="step === 'input'" class="step-container">
+    <div class="security-notice">
+      <ion-icon name="shield-checkmark" color="primary"></ion-icon>
+      <p>Por seguridad, necesitamos verificar tu identidad antes de cambiar tu email</p>
+    </div>
+
+    <form [formGroup]="emailForm" (ngSubmit)="requestEmailChange()">
+      <div class="form-section">
+        <ion-item class="form-item">
+          <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Contraseña Actual *</ion-label>
+          <ion-input 
+            formControlName="currentPassword" 
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Ingresa tu contraseña actual">
+          </ion-input>
+          <ion-button 
+            fill="clear" 
+            slot="end" 
+            (click)="togglePasswordVisibility()"
+            class="password-toggle">
+            <ion-icon 
+              [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+              slot="icon-only">
+            </ion-icon>
+          </ion-button>
+        </ion-item>
+        <div class="error-message" *ngIf="currentPassword?.invalid && currentPassword?.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span *ngIf="currentPassword?.errors?.['required']">La contraseña actual es requerida</span>
+          <span *ngIf="currentPassword?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+          <span *ngIf="currentPassword?.errors?.['incorrect']">Contraseña incorrecta. Verifícala e intenta de nuevo</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <ion-item class="form-item">
+          <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Nuevo Email *</ion-label>
+          <ion-input 
+            formControlName="newEmail" 
+            type="email"
+            placeholder="ejemplo@correo.com">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="newEmailControl?.invalid && newEmailControl?.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span *ngIf="newEmailControl?.errors?.['required']">El nuevo email es requerido</span>
+          <span *ngIf="newEmailControl?.errors?.['email']">Ingresa un email válido</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <ion-item class="form-item">
+          <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Confirmar Nuevo Email *</ion-label>
+          <ion-input 
+            formControlName="confirmEmail" 
+            type="email"
+            placeholder="Confirma tu nuevo email">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="confirmEmail?.invalid && confirmEmail?.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span *ngIf="confirmEmail?.errors?.['required']">Debes confirmar el nuevo email</span>
+        </div>
+        <div class="error-message" *ngIf="emailForm.errors?.['emailMismatch'] && confirmEmail?.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>Los emails no coinciden</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <ion-item class="form-item">
+          <ion-icon name="call-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Número de Teléfono *</ion-label>
+          <ion-input 
+            formControlName="phoneNumber" 
+            type="tel"
+            placeholder="Ej: 3001234567 o +573001234567"
+            (ionInput)="onPhoneNumberChange($event)">
+          </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="phoneNumberControl?.invalid && phoneNumberControl?.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span *ngIf="phoneNumberControl?.errors?.['required']">El número de teléfono es requerido</span>
+          <span *ngIf="phoneNumberControl?.errors?.['invalidPhone']">Formato inválido. Usa: 3001234567 o +573001234567</span>
+        </div>
+        <div class="phone-help">
+          <ion-icon name="information-circle-outline" color="medium"></ion-icon>
+          <span>Necesario para verificación SMS de seguridad</span>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <ion-button 
+          expand="block" 
+          type="submit" 
+          [disabled]="!emailForm.valid || loading"
+          class="primary-button">
+          <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+          <span *ngIf="!loading">Enviar Código SMS</span>
+        </ion-button>
+      </div>
+
+      <!-- Sección de ayuda para errores comunes -->
+      <div class="help-section">
+        <ion-accordion-group>
+          <ion-accordion value="troubleshoot">
+            <ion-item slot="header">
+              <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+              <ion-label>¿Tienes problemas?</ion-label>
+            </ion-item>
+            <div slot="content" class="help-content">
+              <div class="help-item">
+                <ion-icon name="key-outline" color="medium"></ion-icon>
+                <div>
+                  <strong>Contraseña incorrecta:</strong>
+                  <p>Verifica que estés usando la contraseña correcta de tu cuenta actual.</p>
+                </div>
+              </div>
+              <div class="help-item">
+                <ion-icon name="wifi-outline" color="medium"></ion-icon>
+                <div>
+                  <strong>Error de conexión:</strong>
+                  <p>Verifica tu conexión a internet e intenta de nuevo.</p>
+                </div>
+              </div>
+              <div class="help-item">
+                <ion-icon name="time-outline" color="medium"></ion-icon>
+                <div>
+                  <strong>Demasiados intentos:</strong>
+                  <p>Espera unos minutos antes de intentar de nuevo.</p>
+                </div>
+              </div>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </div>
+    </form>
+  </div>
+
+  <!-- Paso 2: Verificación SMS -->
+  <div *ngIf="step === 'sms'" class="step-container sms-step">
+    <div class="sms-content">
+      <div class="sms-icon">
+        <ion-icon name="chatbox-outline" color="primary"></ion-icon>
+      </div>
+      <h3>Verificación SMS</h3>
+      <p>Enviamos un código de 6 dígitos a tu teléfono:</p>
+      <div class="phone-highlight">{{ formattedPhoneNumber }}</div>
+      
+      <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
+        <div class="otp-section">
+          <ion-item class="otp-item">
+            <ion-label position="stacked">Código de Verificación</ion-label>
+            <ion-input 
+              formControlName="otpCode"
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              placeholder="000000"
+              class="otp-input">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="otpCode?.invalid && otpCode?.touched">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span *ngIf="otpCode?.errors?.['required']">El código es requerido</span>
+            <span *ngIf="otpCode?.errors?.['pattern']">El código debe tener 6 dígitos</span>
+          </div>
+        </div>
+
+        <div class="otp-actions">
+          <ion-button 
+            expand="block" 
+            type="submit"
+            [disabled]="!otpForm.valid || loading"
+            class="primary-button">
+            <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+            <span *ngIf="!loading">Verificar Código</span>
+          </ion-button>
+
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            (click)="resendOTP()"
+            [disabled]="loading || canResend > 0"
+            class="resend-button">
+            <span *ngIf="canResend <= 0">Reenviar Código</span>
+            <span *ngIf="canResend > 0">Reenviar en {{ canResend }}s</span>
+          </ion-button>
+
+          <ion-button 
+            expand="block" 
+            fill="clear" 
+            (click)="goBack()"
+            [disabled]="loading"
+            class="back-button">
+            <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+            Cambiar Teléfono
+          </ion-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- reCAPTCHA container (invisible) -->
+    <div id="recaptcha-container"></div>
+  </div>
+
+  <!-- Paso 3: Verificación pendiente -->
+  <div *ngIf="step === 'verification'" class="step-container verification-step">
+    <div class="verification-content">
+      <div class="verification-icon">
+        <ion-icon name="mail-unread" color="primary"></ion-icon>
+      </div>
+      <h3>Verifica tu nuevo email</h3>
+      <p>Se envió un correo de verificación a:</p>
+      <div class="email-highlight">{{ newEmail }}</div>
+      
+      <div class="instructions">
+        <div class="instruction-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>Revisa tu bandeja de entrada</span>
+        </div>
+        <div class="instruction-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>Haz clic en el enlace de verificación</span>
+        </div>
+        <div class="instruction-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>Regresa aquí para confirmar</span>
+        </div>
+      </div>
+
+      <div class="verification-actions">
+        <ion-button 
+          expand="block" 
+          (click)="checkVerificationStatus()"
+          [disabled]="loading"
+          class="primary-button">
+          <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+          <span *ngIf="!loading">Ya Verifiqué mi Email</span>
+        </ion-button>
+
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          (click)="cancelEmailChange()"
+          [disabled]="loading"
+          class="cancel-button">
+          Cancelar Cambio
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <ion-accordion-group>
+        <ion-accordion value="help">
+          <ion-item slot="header">
+            <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+            <ion-label>¿No recibiste el correo?</ion-label>
+          </ion-item>
+          <div slot="content" class="help-content">
+            <ul>
+              <li>Revisa tu carpeta de spam</li>
+              <li>Verifica que escribiste correctamente el email</li>
+              <li>El correo puede tardar unos minutos en llegar</li>
+              <li>Si continúas con problemas, cancela y vuelve a intentar</li>
+            </ul>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+  </div>
+
+  <!-- Paso 4: Éxito -->
+  <div *ngIf="step === 'success'" class="step-container success-step">
+    <div class="success-content">
+      <div class="success-animation">
+        <ion-icon name="checkmark-circle" color="success"></ion-icon>
+      </div>
+      <h3>¡Email actualizado!</h3>
+      <p>Tu correo electrónico ha sido cambiado exitosamente a:</p>
+      <div class="email-highlight success">{{ newEmail }}</div>
+      <p class="success-note">Se cerrará esta ventana automáticamente...</p>
+    </div>
+  </div>
+</ion-content>

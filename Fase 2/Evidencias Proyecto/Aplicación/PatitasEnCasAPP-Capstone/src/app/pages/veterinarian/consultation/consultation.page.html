@@ -1,0 +1,382 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/veterinarian/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ viewOnly ? 'Detalles de Consulta' : 'Consulta' }} - {{pet?.name}}</ion-title>
+    <ion-buttons slot="end" *ngIf="!viewOnly">
+      <ion-button (click)="toggleTemplates()">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="takePhoto()">
+        <ion-icon name="camera-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <!-- Progress bar -->
+  <ion-toolbar *ngIf="!viewOnly">
+    <div class="step-progress">
+      <div *ngFor="let step of steps" 
+           class="step-item" 
+           [class.active]="step.id === currentStep"
+           [class.completed]="step.completed"
+           (click)="goToStep(step.id)">
+        <ion-icon [name]="step.completed ? 'checkmark-circle' : step.icon"></ion-icon>
+        <span class="step-name">{{step.name}}</span>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="consultation-container" [class.view-only-mode]="viewOnly">
+    
+    <!-- Plantillas rápidas (flotante) -->
+    <div class="quick-templates" *ngIf="showTemplates">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Plantillas Rápidas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-button expand="block" fill="outline" size="small" (click)="insertTemplate('normal')">
+            Sin hallazgos anormales
+          </ion-button>
+          <ion-button expand="block" fill="outline" size="small" (click)="insertTemplate('stable')">
+            Paciente estable
+          </ion-button>
+          <ion-button expand="block" fill="outline" size="small" (click)="insertTemplate('followup')">
+            Requiere seguimiento
+          </ion-button>
+          <ion-button expand="block" fill="outline" size="small" (click)="insertTemplate('informed')">
+            Propietario informado
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Paso 1: Signos Vitales -->
+    <div *ngIf="currentStep === 1 || viewOnly" class="step-content">
+      <h2>📊 Signos Vitales</h2>
+      
+      <ion-card>
+        <ion-card-content>
+          <!-- Peso -->
+          <ion-item>
+            <ion-label position="stacked">Peso (kg) *</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="consultation.weight"
+              (ionBlur)="validateVitalSigns()"
+              [readonly]="viewOnly"
+              placeholder="24.5">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="vitalSignsAlerts.weight.message" 
+               class="vital-alert"
+               [class.warning]="vitalSignsAlerts.weight.status === 'warning'"
+               [class.danger]="vitalSignsAlerts.weight.status === 'danger'">
+            <ion-icon name="alert-circle"></ion-icon>
+            {{vitalSignsAlerts.weight.message}}
+          </div>
+          <p class="helper-text" *ngIf="lastRecord?.weight">
+            Última consulta: {{lastRecord.weight}} kg
+          </p>
+
+          <!-- Temperatura -->
+          <ion-item>
+            <ion-label position="stacked">Temperatura (°C) *</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="consultation.temperature"
+              (ionBlur)="validateVitalSigns()"
+              [readonly]="viewOnly"
+              placeholder="38.5">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="vitalSignsAlerts.temperature.message" 
+               class="vital-alert"
+               [class.normal]="vitalSignsAlerts.temperature.status === 'normal'"
+               [class.warning]="vitalSignsAlerts.temperature.status === 'warning'"
+               [class.danger]="vitalSignsAlerts.temperature.status === 'danger'">
+            <ion-icon [name]="vitalSignsAlerts.temperature.status === 'normal' ? 'checkmark-circle' : 'alert-circle'"></ion-icon>
+            {{vitalSignsAlerts.temperature.message}}
+          </div>
+          <p class="helper-text">Normal: {{pet?.species === 'Gato' ? '38-39.5°C' : '38-39.2°C'}}</p>
+
+          <!-- Frecuencia Cardíaca -->
+          <ion-item>
+            <ion-label position="stacked">Frecuencia Cardíaca (lpm)</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="consultation.heartRate"
+              (ionBlur)="validateVitalSigns()"
+              [readonly]="viewOnly"
+              placeholder="85">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="vitalSignsAlerts.heartRate.message" 
+               class="vital-alert"
+               [class.normal]="vitalSignsAlerts.heartRate.status === 'normal'"
+               [class.warning]="vitalSignsAlerts.heartRate.status === 'warning'"
+               [class.danger]="vitalSignsAlerts.heartRate.status === 'danger'">
+            <ion-icon [name]="vitalSignsAlerts.heartRate.status === 'normal' ? 'checkmark-circle' : 'alert-circle'"></ion-icon>
+            {{vitalSignsAlerts.heartRate.message}}
+          </div>
+          <p class="helper-text">Normal: {{pet?.species === 'Gato' ? '120-140 lpm' : '60-140 lpm'}}</p>
+
+          <!-- Frecuencia Respiratoria -->
+          <ion-item>
+            <ion-label position="stacked">Frecuencia Respiratoria (rpm)</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="consultation.respiratoryRate"
+              [readonly]="viewOnly"
+              placeholder="22">
+            </ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Paso 2: Examinación -->
+    <div *ngIf="currentStep === 2 || viewOnly" class="step-content">
+      <h2>👁️ Examinación Física</h2>
+      
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Estado General *</ion-label>
+            <ion-select [(ngModel)]="consultation.generalCondition" [disabled]="viewOnly" placeholder="Seleccionar">
+              <ion-select-option value="Excelente">Excelente</ion-select-option>
+              <ion-select-option value="Bueno">Bueno</ion-select-option>
+              <ion-select-option value="Regular">Regular</ion-select-option>
+              <ion-select-option value="Malo">Malo</ion-select-option>
+              <ion-select-option value="Crítico">Crítico</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Mucosas</ion-label>
+            <ion-select [(ngModel)]="consultation.mucosas" [disabled]="viewOnly" placeholder="Seleccionar">
+              <ion-select-option value="Rosadas">Rosadas (Normal)</ion-select-option>
+              <ion-select-option value="Pálidas">Pálidas</ion-select-option>
+              <ion-select-option value="Cianóticas">Cianóticas (Azuladas)</ion-select-option>
+              <ion-select-option value="Ictéricas">Ictéricas (Amarillas)</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Hidratación</ion-label>
+            <ion-select [(ngModel)]="consultation.hydration" [disabled]="viewOnly" placeholder="Seleccionar">
+              <ion-select-option value="Normal">Normal</ion-select-option>
+              <ion-select-option value="Leve">Deshidratación Leve</ion-select-option>
+              <ion-select-option value="Moderada">Deshidratación Moderada</ion-select-option>
+              <ion-select-option value="Severa">Deshidratación Severa</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Palpación / Hallazgos</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.palpation"
+              rows="4"
+              [readonly]="viewOnly"
+              placeholder="Describe hallazgos de la palpación...">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Paso 3: Diagnóstico -->
+    <div *ngIf="currentStep === 3 || viewOnly" class="step-content">
+      <h2>🩺 Diagnóstico</h2>
+      
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Diagnóstico Principal *</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.diagnosis"
+              rows="3"
+              [readonly]="viewOnly"
+              placeholder="Ej: Gastroenteritis aguda">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Diagnóstico Diferencial</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.differentialDiagnosis"
+              rows="2"
+              [readonly]="viewOnly"
+              placeholder="Otras posibilidades a considerar...">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Severidad</ion-label>
+            <ion-select [(ngModel)]="consultation.severity" [disabled]="viewOnly">
+              <ion-select-option value="leve">Leve</ion-select-option>
+              <ion-select-option value="moderada">Moderada</ion-select-option>
+              <ion-select-option value="severa">Severa</ion-select-option>
+              <ion-select-option value="crítica">Crítica</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Paso 4: Tratamiento -->
+    <div *ngIf="currentStep === 4 || viewOnly" class="step-content">
+      <h2>💊 Tratamiento</h2>
+      
+      <!-- Prescripciones -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Prescripciones</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="consultation.prescriptions.length > 0">
+            <ion-item *ngFor="let rx of consultation.prescriptions; let i = index">
+              <ion-label>
+                <h3>{{rx.medication}}</h3>
+                <p>{{rx.dosage}} - {{rx.duration}}</p>
+              </ion-label>
+              <ion-button *ngIf="!viewOnly" slot="end" fill="clear" color="danger" (click)="removePrescription(i)">
+                <ion-icon name="trash"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-list>
+          <ion-button *ngIf="!viewOnly" expand="block" (click)="addPrescription()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            Agregar Medicamento
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Procedimientos -->
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Procedimientos Realizados</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.procedures"
+              rows="3"
+              [readonly]="viewOnly"
+              placeholder="Ej: Limpieza de herida, aplicación de vendaje...">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Recomendaciones -->
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Recomendaciones para el Dueño</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.recommendations"
+              rows="4"
+              [readonly]="viewOnly"
+              placeholder="Ej: Dieta blanda por 3 días, evitar ejercicio...">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Paso 5: Seguimiento -->
+    <div *ngIf="currentStep === 5 || viewOnly" class="step-content">
+      <h2>📅 Seguimiento</h2>
+      
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Próximo Control (días)</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="consultation.nextAppointmentDays"
+              [readonly]="viewOnly"
+              placeholder="7">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Instrucciones de Monitoreo</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.monitoringInstructions"
+              rows="3"
+              [readonly]="viewOnly"
+              placeholder="Ej: Observar vómitos, controlar temperatura...">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Señales de Alarma</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.redFlags"
+              rows="3"
+              [readonly]="viewOnly"
+              placeholder="Ej: Si vomita más de 3 veces, llamar inmediatamente...">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Fotos adjuntas -->
+      <ion-card *ngIf="consultation.photos.length > 0">
+        <ion-card-header>
+          <ion-card-title>Fotos de la Consulta</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="photos-grid">
+            <div *ngFor="let photo of consultation.photos; let i = index" class="photo-item">
+              <img [src]="photo" alt="Foto {{i+1}}">
+              <ion-button *ngIf="!viewOnly" size="small" fill="clear" color="danger" (click)="removePhoto(i)">
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Notas adicionales -->
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Notas Adicionales</ion-label>
+            <ion-textarea 
+              [(ngModel)]="consultation.notes"
+              rows="4"
+              [readonly]="viewOnly"
+              placeholder="Cualquier información adicional...">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="!viewOnly">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="previousStep()" [disabled]="currentStep === 1" fill="outline">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Anterior
+      </ion-button>
+    </ion-buttons>
+    <div class="step-indicator">
+      Paso {{currentStep}} de {{totalSteps}}
+    </div>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextStep()" color="primary" fill="solid">
+        {{currentStep === totalSteps ? 'Finalizar' : 'Siguiente'}}
+        <ion-icon [name]="currentStep === totalSteps ? 'checkmark' : 'arrow-forward'" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

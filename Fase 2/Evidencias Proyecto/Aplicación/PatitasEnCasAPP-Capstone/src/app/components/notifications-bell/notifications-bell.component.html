@@ -1,0 +1,6 @@
+<div class="notifications-container">
+  <ion-button fill="clear" (click)="toggleNotifications()">
+    <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+    <ion-badge *ngIf="(unreadCount$ | async) > 0" color="danger">{{ unreadCount$ | async }}</ion-badge>
+  </ion-button>
+</div>
