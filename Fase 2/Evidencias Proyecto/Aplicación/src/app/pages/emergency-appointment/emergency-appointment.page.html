@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      Registrar Emergencia
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="emergency-content">
+  <div class="emergency-container">
+    
+    <!-- Alerta de emergencia -->
+    <ion-card class="emergency-alert">
+      <ion-card-content>
+        <div class="alert-content">
+          <ion-icon name="warning" color="danger" size="large"></ion-icon>
+          <div>
+            <h2>⚡ REGISTRO DE EMERGENCIA</h2>
+            <p>Complete la información de la emergencia veterinaria que requiere atención inmediata.</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Formulario de emergencia -->
+    <form (ngSubmit)="registerEmergency()">
+      
+      <!-- Selección de Mascota -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="paw-outline"></ion-icon>
+            Mascota en Emergencia
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          
+          <!-- Búsqueda de mascota -->
+          <ion-item>
+            <ion-label position="stacked">Buscar Mascota</ion-label>
+            <ion-input 
+              [(ngModel)]="searchTerm" 
+              name="searchTerm"
+              placeholder="Nombre, tipo o raza de la mascota..."
+              (ionInput)="filterPets()">
+            </ion-input>
+            <ion-icon name="search-outline" slot="end"></ion-icon>
+          </ion-item>
+
+          <!-- Lista de mascotas filtradas -->
+          <div class="pets-list" *ngIf="filteredPets.length > 0">
+            <ion-radio-group [(ngModel)]="emergency.petId" name="petId">
+              <ion-item *ngFor="let pet of filteredPets.slice(0, 5)" 
+                        class="pet-item"
+                        [class.selected]="emergency.petId === pet.id"
+                        (click)="selectPet(pet)">
+                <ion-thumbnail slot="start">
+                  <img [src]="pet.urlImagen || '/assets/imgs/pets/default-pet.jpg'" [alt]="pet.nombre">
+                </ion-thumbnail>
+                <ion-label>
+                  <h3>{{ pet.nombre || 'Sin nombre' }}</h3>
+                  <p>{{ pet.tipoMascota | titlecase }} - {{ pet.raza || 'Raza mixta' }}</p>
+                  <p><small>Edad: {{ pet.edadMeses ? pet.edadMeses + ' meses' : pet.edadAnios ? pet.edadAnios + ' años' : 'No especificada' }}</small></p>
+                </ion-label>
+                <ion-radio slot="end" [value]="pet.id"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+
+          <div *ngIf="filteredPets.length === 0 && searchTerm" class="no-pets">
+            <ion-icon name="search-outline" color="medium"></ion-icon>
+            <p>No se encontraron mascotas con ese criterio</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Motivo de la emergencia -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="medical-outline"></ion-icon>
+            Motivo de la Emergencia
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          
+          <!-- Motivos predefinidos -->
+          <ion-item>
+            <ion-label position="stacked">Seleccione el motivo (opcional)</ion-label>
+            <ion-select 
+              placeholder="Seleccionar motivo común..."
+              (ionChange)="selectReason($event.detail.value)">
+              <ion-select-option *ngFor="let reason of emergencyReasons" [value]="reason">
+                {{ reason }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Descripción personalizada -->
+          <ion-item>
+            <ion-label position="stacked">Descripción de la Emergencia *</ion-label>
+            <ion-textarea 
+              [(ngModel)]="emergency.reason"
+              name="reason"
+              placeholder="Describa detalladamente la situación de emergencia..."
+              rows="4"
+              required>
+            </ion-textarea>
+          </ion-item>
+
+          <!-- Notas adicionales -->
+          <ion-item>
+            <ion-label position="stacked">Notas Adicionales</ion-label>
+            <ion-textarea 
+              [(ngModel)]="emergency.notes"
+              name="notes"
+              placeholder="Información adicional, síntomas observados, medicamentos administrados, etc."
+              rows="3">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Veterinario y fecha -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="person-outline"></ion-icon>
+            Veterinario y Fecha
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          
+          <!-- Fecha y hora -->
+          <ion-item>
+            <ion-label position="stacked">Fecha y Hora de la Emergencia *</ion-label>
+            <ion-datetime 
+              [(ngModel)]="emergency.date"
+              name="date"
+              display-format="DD/MM/YYYY HH:mm"
+              picker-format="DD/MM/YYYY HH:mm"
+              [min]="minDate"
+              required
+              cancelText="Cancelar"
+              doneText="Confirmar">
+            </ion-datetime>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Resumen -->
+      <ion-card *ngIf="isFormValid()" class="summary-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            Resumen de la Emergencia
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="summary-item">
+            <strong>Mascota:</strong> {{ getSelectedPet()?.nombre || 'No seleccionada' }}
+          </div>
+          <div class="summary-item">
+            <strong>Fecha:</strong> {{ emergency.date | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+          <div class="summary-item">
+            <strong>Fecha:</strong> {{ emergency.date | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+          <div class="summary-item">
+            <strong>Prioridad:</strong> 
+            <ion-chip color="danger">
+              <ion-icon name="alert-circle"></ion-icon>
+              EMERGENCIA
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <ion-button 
+          expand="block" 
+          color="danger"
+          [disabled]="!isFormValid() || isLoading"
+          type="submit">
+          <ion-icon name="flash-outline" slot="start"></ion-icon>
+          REGISTRAR EMERGENCIA
+        </ion-button>
+        
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          color="medium"
+          (click)="goBack()">
+          <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+      </div>
+
+    </form>
+  </div>
+</ion-content>

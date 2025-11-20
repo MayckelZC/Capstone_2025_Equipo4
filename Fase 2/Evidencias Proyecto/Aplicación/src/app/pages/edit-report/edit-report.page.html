@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/my-reports"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Reporte</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando reporte...</p>
+  </div>
+
+  <form [formGroup]="reportForm" (ngSubmit)="saveReport()" *ngIf="!loading && report">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Motivo del Reporte <ion-text color="danger">*</ion-text></ion-label>
+        <ion-select formControlName="reason" placeholder="Selecciona un motivo">
+          <ion-select-option value="contenido_inapropiado">Contenido inapropiado</ion-select-option>
+          <ion-select-option value="informacion_falsa">Información falsa</ion-select-option>
+          <ion-select-option value="mascota_abandonada">Mascota abandonada</ion-select-option>
+          <ion-select-option value="maltrato_animal">Maltrato animal</ion-select-option>
+          <ion-select-option value="otro">Otro</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-text color="danger" *ngIf="reportForm.get('reason')?.touched && reportForm.get('reason')?.errors?.['required']">
+        <p class="ion-padding-start">El motivo es requerido.</p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked">Detalles Adicionales</ion-label>
+        <ion-textarea formControlName="details" rows="4" placeholder="Proporcione más detalles sobre el reporte"></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="reportForm.invalid || loading" class="ion-margin-top">
+      Guardar Cambios
+    </ion-button>
+    <ion-button expand="block" color="medium" (click)="cancel()" class="ion-margin-top">
+      Cancelar
+    </ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Dashboard Administrativo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card users-card" [routerLink]="['/admin/users']">
+          <ion-card-header>
+            <ion-card-subtitle>Usuarios Registrados</ion-card-subtitle>
+            <ion-card-title>{{ userCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="people-outline"></ion-icon>
+            <p class="summary-text">{{ newUsersThisWeekCount$ | async }} nuevos esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card pets-card" [routerLink]="['/admin/pets']">
+          <ion-card-header>
+            <ion-card-subtitle>Mascotas Publicadas</ion-card-subtitle>
+            <ion-card-title>{{ petCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="paw-outline"></ion-icon>
+            <p class="summary-text">{{ newPetsThisWeekCount$ | async }} nuevas esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card adoptions-card" [routerLink]="['/admin/adoption-requests']">
+          <ion-card-header>
+            <ion-card-subtitle>Adopciones Exitosas</ion-card-subtitle>
+            <ion-card-title>{{ adoptionCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="heart-outline"></ion-icon>
+            <p class="summary-text">{{ newAdoptionsThisWeekCount$ | async }} nuevas esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card donations-card" [routerLink]="['/admin/donations']">
+          <ion-card-header>
+            <ion-card-subtitle>Donaciones Recibidas</ion-card-subtitle>
+            <ion-card-title>{{ donationCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="cash-outline"></ion-icon>
+            <p class="summary-text">{{ newDonationsThisWeekCount$ | async }} nuevas esta semana</p>
+            <div class="chart-placeholder">Gráfico de Donaciones</div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col> -->
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card reports-card" [routerLink]="['/admin/reports']">
+          <ion-card-header>
+            <ion-card-subtitle>Reportes Pendientes</ion-card-subtitle>
+            <ion-card-title>{{ reportCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <p class="summary-text">{{ newReportsThisWeekCount$ | async }} nuevos esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

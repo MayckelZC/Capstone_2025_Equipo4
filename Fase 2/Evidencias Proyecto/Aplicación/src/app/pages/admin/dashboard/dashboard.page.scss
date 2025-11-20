@@ -1,0 +1,80 @@
+.dashboard-card {
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  ion-card-header {
+    background: var(--ion-color-light);
+    padding: 1rem;
+    border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+  }
+
+  ion-card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+  }
+
+  ion-card-subtitle {
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+  }
+
+  ion-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+
+    ion-icon {
+      font-size: 3rem;
+      color: var(--ion-color-primary);
+      margin-bottom: 5px;
+    }
+
+    .summary-text {
+      font-size: 0.8rem;
+      color: var(--ion-color-medium);
+      margin-top: 5px;
+    }
+
+    .chart-placeholder {
+      width: 100%;
+      height: 100px; /* Adjusted height for better fit */
+      background: var(--ion-color-step-50, #f2f2f2);
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--ion-color-medium);
+      margin-top: 10px;
+    }
+  }
+}
+
+.users-card {
+  border-left: 5px solid var(--ion-color-tertiary);
+}
+
+.pets-card {
+  border-left: 5px solid var(--ion-color-warning);
+}
+
+.adoptions-card {
+  border-left: 5px solid var(--ion-color-success);
+}
+
+.donations-card {
+  border-left: 5px solid var(--ion-color-secondary);
+}
+
+.reports-card {
+  border-left: 5px solid var(--ion-color-danger);
+}
+

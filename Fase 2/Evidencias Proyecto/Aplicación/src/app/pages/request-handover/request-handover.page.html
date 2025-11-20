@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/my-adoptions"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Coordinar Entrega</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="request">
+    <h2>Entrega para {{ request.petName }}</h2>
+
+    <!-- Adopter's View -->
+    <div *ngIf="isAdopter()">
+      <div *ngIf="!handover">
+        <p>Propon una fecha y hora para recoger a tu nueva mascota.</p>
+        <ion-item>
+          <ion-label position="floating">Fecha y Hora Propuesta</ion-label>
+          <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        </ion-item>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="datetime" 
+              [(ngModel)]="proposedDate"
+              cancelText="Cancelar"
+              doneText="Confirmar">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+        <ion-button expand="block" (click)="requestHandover()" [disabled]="!proposedDate">
+          Solicitar Cita
+        </ion-button>
+      </div>
+
+      <div *ngIf="handover">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Estado de la Cita</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Estado:</strong> {{ handover.status }}</p>
+            <p><strong>Fecha Propuesta:</strong> {{ handover.proposedDate | date:'short' }}</p>
+            <div *ngIf="handover.status === 'confirmed'">
+              <p><strong>Fecha Confirmada:</strong> {{ handover.confirmedDate | date:'short' }}</p>
+              <p><strong>Lugar:</strong> {{ handover.location }}</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Owner's View -->
+    <div *ngIf="isPetOwner()">
+      <div *ngIf="handover && handover.status === 'requested'">
+        <p>El adoptante ha propuesto una fecha para la entrega.</p>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Propuesta de Cita</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Fecha Propuesta:</strong> {{ handover.proposedDate | date:'short' }}</p>
+            <ion-item>
+              <ion-label position="floating">Fecha y Hora de Confirmación</ion-label>
+              <ion-datetime-button datetime="confirm_datetime"></ion-datetime-button>
+            </ion-item>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime 
+                  id="confirm_datetime" 
+                  [(ngModel)]="confirmedDate"
+                  cancelText="Cancelar"
+                  doneText="Confirmar">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+            <ion-item>
+              <ion-label position="floating">Lugar de Encuentro</ion-label>
+              <ion-input [(ngModel)]="location"></ion-input>
+            </ion-item>
+            <ion-button expand="block" (click)="confirmHandover()" [disabled]="!confirmedDate || !location">
+              Confirmar Cita
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="handover && handover.status === 'confirmed'">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Cita Confirmada</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Fecha:</strong> {{ handover.confirmedDate | date:'short' }}</p>
+            <p><strong>Lugar:</strong> {{ handover.location }}</p>
+            <ion-button expand="block" (click)="completeHandover()">Marcar como Entregado</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+       <div *ngIf="handover && handover.status === 'completed'">
+        <p>La mascota ha sido entregada.</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

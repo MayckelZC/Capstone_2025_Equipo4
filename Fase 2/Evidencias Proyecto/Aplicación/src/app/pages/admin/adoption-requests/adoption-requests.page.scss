@@ -1,0 +1,66 @@
+ion-card {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-lg); /* Add some space between cards */
+}
+
+ion-item {
+  --padding-start: var(--spacing-lg);
+  --padding-end: var(--spacing-lg);
+  --padding-top: var(--spacing-md);
+  --padding-bottom: var(--spacing-md);
+}
+
+ion-label {
+  h2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  p {
+    font-size: var(--font-size-sm);
+    color: var(--ion-text-color-secondary);
+    margin-top: var(--spacing-xs);
+  }
+}
+
+ion-thumbnail {
+  --border-radius: var(--border-radius-sm);
+  width: 60px;
+  height: 60px;
+  margin-inline-end: var(--spacing-md);
+}
+
+.ion-text-center {
+  padding: var(--spacing-xl);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  p {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+.ion-row.ion-justify-content-end {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--ion-color-light);
+}
+
+ion-button {
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+}

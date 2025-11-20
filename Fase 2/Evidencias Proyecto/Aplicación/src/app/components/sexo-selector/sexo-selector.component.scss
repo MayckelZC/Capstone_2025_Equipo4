@@ -1,0 +1,12 @@
+button {
+  border: 2px solid #22c55e;
+  background: white;
+  color: #22c55e;
+  padding: 10px 20px;
+  cursor: pointer;
+  
+  &.selected {
+    background-color: #22c55e;
+    color: white;
+  }
+}

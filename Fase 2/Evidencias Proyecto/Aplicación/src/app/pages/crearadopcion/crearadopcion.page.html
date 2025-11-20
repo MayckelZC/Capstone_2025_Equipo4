@@ -1,0 +1,655 @@
+<ion-header class="modern-header">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="header-content">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Crear Adopción</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="creation-form-content" padding>
+  <form [formGroup]="adopcionForm" (ngSubmit)="onSubmit()">
+    <div class="required-fields-notice">
+      <ion-text color="danger" class="asterisk-icon">*</ion-text>
+      <ion-text color="medium">
+        <p>Indica campos obligatorios</p>
+      </ion-text>
+    </div>
+
+    <!-- Detalles de la Mascota -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="paw-outline"></ion-icon>
+        <span>Detalles de la Mascota</span>
+      </div>
+
+        <!-- Tipo de Mascota -->
+        <div class="field-header required">
+          <ion-icon name="paw-outline"></ion-icon>
+          <ion-label>Tipo de Mascota</ion-label>
+          <ion-text color="danger" class="required-asterisk">*</ion-text>
+        </div>
+        
+        <div class="pet-type-selector">
+          <div 
+            class="pet-type-option" 
+            [class.active]="adopcionForm.get('tipoMascota')?.value === 'perro'"
+            (click)="setPetType('perro')">
+            <div class="pet-type-icon dog">
+              🐕
+            </div>
+            <span>Perro</span>
+            <small>Compañero leal</small>
+          </div>
+          
+          <div 
+            class="pet-type-option" 
+            [class.active]="adopcionForm.get('tipoMascota')?.value === 'gato'"
+            (click)="setPetType('gato')">
+            <div class="pet-type-icon cat">
+              🐱
+            </div>
+            <span>Gato</span>
+            <small>Compañero independiente</small>
+          </div>
+        </div>
+        <ion-text color="danger" *ngIf="adopcionForm.get('tipoMascota')?.touched && adopcionForm.get('tipoMascota')?.invalid">
+          Debes seleccionar un tipo de mascota.
+        </ion-text>
+
+        <!-- Tamaño -->
+        <div class="field-header required">
+          <ion-icon name="resize-outline"></ion-icon>
+          <ion-label>Tamaño</ion-label>
+          <ion-text color="danger" class="required-asterisk">*</ion-text>
+        </div>
+        
+        <div class="size-selector">
+          <div 
+            class="size-option" 
+            [class.active]="adopcionForm.get('tamano')?.value === 'pequeño'"
+            (click)="setSize('pequeño')">
+            <div class="size-icon small">
+              <ion-icon name="paw"></ion-icon>
+            </div>
+            <span>Pequeño</span>
+            <small>Hasta 10kg</small>
+          </div>
+          
+          <div 
+            class="size-option" 
+            [class.active]="adopcionForm.get('tamano')?.value === 'mediano'"
+            (click)="setSize('mediano')">
+            <div class="size-icon medium">
+              <ion-icon name="paw"></ion-icon>
+            </div>
+            <span>Mediano</span>
+            <small>10-25kg</small>
+          </div>
+          
+          <div 
+            class="size-option" 
+            [class.active]="adopcionForm.get('tamano')?.value === 'grande'"
+            (click)="setSize('grande')">
+            <div class="size-icon large">
+              <ion-icon name="paw"></ion-icon>
+            </div>
+            <span>Grande</span>
+            <small>Más de 25kg</small>
+          </div>
+        </div>
+        <ion-text color="danger" *ngIf="adopcionForm.get('tamano')?.touched && adopcionForm.get('tamano')?.invalid">
+          Debes seleccionar un tamaño.
+        </ion-text>
+
+        <!-- Etapa de Vida -->
+        <div class="field-header required">
+          <ion-icon name="hourglass-outline"></ion-icon>
+          <ion-label>Etapa de Vida</ion-label>
+          <ion-icon name="alert-circle" color="danger" class="required-icon"></ion-icon>
+        </div>
+        
+        <div class="age-selector">
+          <div 
+            class="age-option" 
+            [class.active]="adopcionForm.get('etapaVida')?.value === 'cachorro'"
+            (click)="setAgeStage('cachorro')">
+            <div class="age-icon puppy">
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <span>Cachorro</span>
+            <small>0-12 meses</small>
+          </div>
+          
+          <div 
+            class="age-option" 
+            [class.active]="adopcionForm.get('etapaVida')?.value === 'joven'"
+            (click)="setAgeStage('joven')">
+            <div class="age-icon young">
+              <ion-icon name="flash"></ion-icon>
+            </div>
+            <span>Joven</span>
+            <small>1-3 años</small>
+          </div>
+          
+          <div 
+            class="age-option" 
+            [class.active]="adopcionForm.get('etapaVida')?.value === 'adulto'"
+            (click)="setAgeStage('adulto')">
+            <div class="age-icon adult">
+              <ion-icon name="heart"></ion-icon>
+            </div>
+            <span>Adulto</span>
+            <small>3-8 años</small>
+          </div>
+          
+          <div 
+            class="age-option" 
+            [class.active]="adopcionForm.get('etapaVida')?.value === 'senior'"
+            (click)="setAgeStage('senior')">
+            <div class="age-icon senior">
+              <ion-icon name="ribbon"></ion-icon>
+            </div>
+            <span>Senior</span>
+            <small>8+ años</small>
+          </div>
+        </div>
+        <ion-text color="danger" *ngIf="adopcionForm.get('etapaVida')?.touched && adopcionForm.get('etapaVida')?.invalid">
+          Debes seleccionar una etapa de vida.
+        </ion-text>
+
+        <!-- Edad en Meses (Solo para Cachorro) -->
+        <ion-item *ngIf="adopcionForm.get('etapaVida')?.value === 'cachorro'" lines="none">
+          <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Edad (Meses) <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input 
+            formControlName="edadMeses" 
+            type="number" 
+            min="0" 
+            max="11" 
+            placeholder="0 - 11 meses" 
+            (ionChange)="onEdadMesesChange($event)"
+            [clearInput]="true">
+          </ion-input>
+        </ion-item>
+        <!-- Mensajes de Error para Edad (Meses) -->
+        <div *ngIf="adopcionForm.get('etapaVida')?.value === 'cachorro' && adopcionForm.get('edadMeses')?.touched">
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadMeses')?.hasError('required')">
+            La edad en meses es requerida.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadMeses')?.hasError('min') || adopcionForm.get('edadMeses')?.hasError('max')">
+            La edad debe estar entre 0 y 11 meses.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadMeses')?.hasError('pattern')">
+            Solo se permiten números.
+          </ion-text>
+        </div>
+
+        <!-- Edad en Años (Joven: 1-3 años) -->
+        <ion-item *ngIf="adopcionForm.get('etapaVida')?.value === 'joven'" lines="none">
+          <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Edad (Años) <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input 
+            formControlName="edadAnios" 
+            type="number" 
+            min="1" 
+            max="3" 
+            placeholder="1 - 3 años" 
+            (ionChange)="onEdadAniosChange($event)"
+            [clearInput]="true">
+          </ion-input>
+        </ion-item>
+        <!-- Mensajes de Error para Joven -->
+        <div *ngIf="adopcionForm.get('etapaVida')?.value === 'joven' && adopcionForm.get('edadAnios')?.touched">
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('required')">
+            La edad en años es requerida.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('min') || adopcionForm.get('edadAnios')?.hasError('max')">
+            La edad debe estar entre 1 y 3 años para jóvenes.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('pattern')">
+            Solo se permiten números.
+          </ion-text>
+        </div>
+
+        <!-- Edad en Años (Adulto: 3-8 años) -->
+        <ion-item *ngIf="adopcionForm.get('etapaVida')?.value === 'adulto'" lines="none">
+          <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Edad (Años) <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input 
+            formControlName="edadAnios" 
+            type="number" 
+            min="3" 
+            max="8" 
+            placeholder="3 - 8 años" 
+            (ionChange)="onEdadAniosChange($event)"
+            [clearInput]="true">
+          </ion-input>
+        </ion-item>
+        <!-- Mensajes de Error para Adulto -->
+        <div *ngIf="adopcionForm.get('etapaVida')?.value === 'adulto' && adopcionForm.get('edadAnios')?.touched">
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('required')">
+            La edad en años es requerida.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('min') || adopcionForm.get('edadAnios')?.hasError('max')">
+            La edad debe estar entre 3 y 8 años para adultos.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('pattern')">
+            Solo se permiten números.
+          </ion-text>
+        </div>
+
+        <!-- Edad en Años (Senior: 8+ años) -->
+        <ion-item *ngIf="adopcionForm.get('etapaVida')?.value === 'senior'" lines="none">
+          <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Edad (Años) <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input 
+            formControlName="edadAnios" 
+            type="number" 
+            min="8" 
+            max="20" 
+            placeholder="8 - 20 años" 
+            (ionChange)="onEdadAniosChange($event)"
+            [clearInput]="true">
+          </ion-input>
+        </ion-item>
+        <!-- Mensajes de Error para Senior -->
+        <div *ngIf="adopcionForm.get('etapaVida')?.value === 'senior' && adopcionForm.get('edadAnios')?.touched">
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('required')">
+            La edad en años es requerida.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('min') || adopcionForm.get('edadAnios')?.hasError('max')">
+            La edad debe estar entre 8 y 20 años para seniors.
+          </ion-text>
+          <ion-text color="danger" *ngIf="adopcionForm.get('edadAnios')?.hasError('pattern')">
+            Solo se permiten números.
+          </ion-text>
+        </div>
+    </div>
+
+    <!-- Características Físicas -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="body-outline"></ion-icon>
+        <span>Características Físicas</span>
+      </div>
+
+        <!-- Nombre (Opcional) -->
+        <div class="field-header">
+          <ion-icon name="text-outline"></ion-icon>
+          <ion-label>Nombre de la Mascota (Opcional)</ion-label>
+        </div>
+        
+        <div class="input-container">
+          <ion-input 
+            formControlName="nombre" 
+            placeholder="Ej: Max, Luna, Toby, Mila..."
+            fill="outline"
+            [clearInput]="true">
+          </ion-input>
+          
+          <div class="input-help">
+            <ion-icon name="information-circle-outline" color="primary"></ion-icon>
+            <span>Si la mascota no tiene nombre, puedes dejarlo vacío</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('nombre')?.touched && adopcionForm.get('nombre')?.hasError('pattern')">
+          Solo se permiten letras y espacios.
+        </ion-text>
+
+        <!-- Sexo -->
+        <div class="field-header">
+          <ion-icon name="male-female-outline"></ion-icon>
+          <ion-label>Sexo <ion-text color="danger">*</ion-text></ion-label>
+        </div>
+        
+        <div class="gender-selector">
+          <ion-button 
+            fill="outline" 
+            [class.active]="adopcionForm.get('sexo')?.value === 'macho'"
+            (click)="setGender('macho')">
+            <ion-icon name="male" slot="start"></ion-icon>
+            Macho
+          </ion-button>
+          
+          <ion-button 
+            fill="outline" 
+            [class.active]="adopcionForm.get('sexo')?.value === 'hembra'"
+            (click)="setGender('hembra')">
+            <ion-icon name="female" slot="start"></ion-icon>
+            Hembra
+          </ion-button>
+        </div>
+        <ion-text color="danger" *ngIf="adopcionForm.get('sexo')?.touched && adopcionForm.get('sexo')?.invalid">
+          Debes seleccionar un sexo.
+        </ion-text>
+
+        <!-- Color -->
+        <div class="field-header">
+          <ion-icon name="color-palette-outline"></ion-icon>
+          <ion-label>Color de la Mascota <ion-text color="danger">*</ion-text></ion-label>
+        </div>
+        
+        <div class="input-container">
+          <ion-input 
+            formControlName="color" 
+            placeholder="Ej: Negro, Blanco, Café, Tricolor, Atigrado..."
+            fill="outline"
+            required
+            [clearInput]="true">
+          </ion-input>
+          
+          <div class="input-help">
+            <ion-icon name="brush-outline" color="primary"></ion-icon>
+            <span>Describe el color principal o patrón del pelaje</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('color')?.touched && adopcionForm.get('color')?.hasError('pattern')">
+          Solo se permiten letras y espacios.
+        </ion-text>
+        <ion-text color="danger" *ngIf="adopcionForm.get('color')?.touched && adopcionForm.get('color')?.invalid && !adopcionForm.get('color')?.hasError('pattern')">
+          El color es requerido.
+        </ion-text>
+
+        <!-- Descripción -->
+        <div class="field-header">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <ion-label>Descripción de la Mascota</ion-label>
+        </div>
+        
+        <div class="description-container">
+          <ion-textarea 
+            formControlName="descripcion" 
+            placeholder="Cuéntanos sobre la personalidad, comportamiento, y características especiales de esta mascota. Ejemplo: Es muy cariñoso, le gusta jugar con pelotas, se lleva bien con otros animales..."
+            [clearOnEdit]="false"
+            rows="4"
+            maxlength="500"
+            fill="outline">
+          </ion-textarea>
+          
+          <div class="character-count">
+            <small>{{getDescriptionLength()}}/500 caracteres</small>
+          </div>
+          
+          <div class="description-help">
+            <ion-icon name="bulb-outline" color="primary"></ion-icon>
+            <span>Incluye detalles sobre su personalidad, hábitos y necesidades especiales</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('descripcion')?.touched && adopcionForm.get('descripcion')?.hasError('pattern')">
+          La descripción contiene caracteres no permitidos.
+        </ion-text>
+    </div>
+
+    <!-- Ubicación -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>Ubicación</span>
+      </div>
+
+        <!-- Ciudad -->
+        <div class="field-header">
+          <ion-icon name="business-outline"></ion-icon>
+          <ion-label>Ciudad <ion-text color="danger">*</ion-text></ion-label>
+        </div>
+        
+        <div class="input-container">
+          <ion-input 
+            formControlName="ciudad" 
+            placeholder="Ej: Santiago, Valparaíso, Concepción, La Serena"
+            fill="outline"
+            required
+            [clearInput]="true">
+          </ion-input>
+          
+          <div class="input-help">
+            <ion-icon name="location-outline" color="primary"></ion-icon>
+            <span>Ingresa la ciudad donde se encuentra la mascota</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('ciudad')?.touched && adopcionForm.get('ciudad')?.hasError('pattern')">
+          Solo se permiten letras y espacios.
+        </ion-text>
+        <ion-text color="danger" *ngIf="adopcionForm.get('ciudad')?.touched && adopcionForm.get('ciudad')?.invalid && !adopcionForm.get('ciudad')?.hasError('pattern')">
+          La ciudad es requerida.
+        </ion-text>
+
+        <!-- Barrio (Opcional) -->
+        <div class="field-header">
+          <ion-icon name="home-outline"></ion-icon>
+          <ion-label>Barrio o Comuna (Opcional)</ion-label>
+        </div>
+        
+        <div class="input-container">
+          <ion-input 
+            formControlName="barrio" 
+            placeholder="Ej: Las Condes, Providencia, Ñuñoa, Viña del Mar"
+            fill="outline"
+            [clearInput]="true">
+          </ion-input>
+          
+          <div class="input-help">
+            <ion-icon name="map-outline" color="primary"></ion-icon>
+            <span>Ayuda a los adoptantes a encontrar mascotas cerca</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('barrio')?.touched && adopcionForm.get('barrio')?.hasError('pattern')">
+          Solo se permiten letras y espacios.
+        </ion-text>
+
+        <!-- Geolocalización -->
+
+    </div>
+
+    <!-- Información de Salud -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="medkit-outline"></ion-icon>
+        <span>Información de Salud</span>
+      </div>
+
+        <!-- Condiciones de Salud -->
+        <div class="field-header">
+          <ion-icon name="medical-outline"></ion-icon>
+          <ion-label>Condiciones de Salud (Opcional)</ion-label>
+        </div>
+        
+        <div class="health-container">
+          <ion-textarea 
+            formControlName="condicionesSalud" 
+            placeholder="Describe cualquier condición médica, alergias, medicamentos, cirugías previas o necesidades especiales de cuidado..."
+            [clearOnEdit]="false"
+            rows="3"
+            maxlength="300"
+            fill="outline">
+          </ion-textarea>
+          
+          <div class="character-count">
+            <small>{{getHealthLength()}}/300 caracteres</small>
+          </div>
+          
+          <div class="health-help">
+            <ion-icon name="shield-checkmark-outline" color="success"></ion-icon>
+            <span>Información importante para futuros adoptantes sobre la salud de la mascota</span>
+          </div>
+        </div>
+        
+        <ion-text color="danger" *ngIf="adopcionForm.get('condicionesSalud')?.touched && adopcionForm.get('condicionesSalud')?.hasError('pattern')">
+          Las condiciones de salud contienen caracteres no permitidos.
+        </ion-text>
+
+      <!-- Estado de Salud -->
+      <div class="section-title">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span>Estado de Salud</span>
+      </div>
+
+        <!-- Esterilizado -->
+        <ion-item lines="none">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          <ion-label>¿Está esterilizado?</ion-label>
+          <ion-toggle slot="end" formControlName="esterilizado"></ion-toggle>
+        </ion-item>
+
+        <!-- Vacunado -->
+        <ion-item lines="none">
+          <ion-icon name="checkmark-done-circle-outline" slot="start"></ion-icon>
+          <ion-label>¿Está vacunado?</ion-label>
+          <ion-toggle slot="end" formControlName="vacuna"></ion-toggle>
+        </ion-item>
+
+        <!-- Desparasitado -->
+        <ion-item lines="none">
+          <ion-icon name="medkit-outline" slot="start"></ion-icon>
+          <ion-label>¿Está desparasitado?</ion-label>
+          <ion-toggle slot="end" formControlName="desparasitado"></ion-toggle>
+        </ion-item>
+    </div>
+
+    <!-- Personalidad y Compatibilidad -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="happy-outline"></ion-icon>
+        <span>Personalidad y Compatibilidad</span>
+      </div>
+        
+        <div class="personality-grid">
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('buenoConNinos')?.value"
+               (click)="togglePersonality('buenoConNinos')">
+            <ion-icon name="people" color="primary"></ion-icon>
+            <span>Bueno con niños</span>
+            <ion-checkbox 
+              formControlName="buenoConNinos" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+          
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('buenoConMascotas')?.value"
+               (click)="togglePersonality('buenoConMascotas')">
+            <ion-icon name="paw" color="success"></ion-icon>
+            <span>Bueno con mascotas</span>
+            <ion-checkbox 
+              formControlName="buenoConMascotas" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+          
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('energetico')?.value"
+               (click)="togglePersonality('energetico')">
+            <ion-icon name="flash" color="warning"></ion-icon>
+            <span>Energético</span>
+            <ion-checkbox 
+              formControlName="energetico" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+          
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('tranquilo')?.value"
+               (click)="togglePersonality('tranquilo')">
+            <ion-icon name="leaf" color="medium"></ion-icon>
+            <span>Tranquilo</span>
+            <ion-checkbox 
+              formControlName="tranquilo" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+          
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('entrenadoEnCasa')?.value"
+               (click)="togglePersonality('entrenadoEnCasa')">
+            <ion-icon name="home" color="success"></ion-icon>
+            <span>Entrenado en casa</span>
+            <ion-checkbox 
+              formControlName="entrenadoEnCasa" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+          
+          <div class="personality-card" 
+               [class.active]="adopcionForm.get('guardian')?.value"
+               (click)="togglePersonality('guardian')">
+            <ion-icon name="shield" color="danger"></ion-icon>
+            <span>Guardián</span>
+            <ion-checkbox 
+              formControlName="guardian" 
+              (click)="$event.stopPropagation()">
+            </ion-checkbox>
+          </div>
+        </div>
+    </div>
+
+    <!-- Subir Imagen -->
+    <div class="form-section">
+      <div class="section-title">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Subir Imagen</span>
+      </div>
+        <div class="image-upload-container" *ngIf="!imageChangedEvent">
+          <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+          <ion-label class="upload-text">Arrastra y suelta una imagen aquí o</ion-label>
+          <div class="upload-buttons">
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" #fileInput />
+            <ion-button (click)="fileInput.click()">Seleccionar Archivo</ion-button>
+            <ion-button (click)="captureImage()">Tomar Foto</ion-button>
+          </div>
+        </div>
+
+        <!-- Step 2: Image Cropper -->
+        <div *ngIf="imageChangedEvent && !croppedImage" class="cropper-container">
+          <ion-list-header>
+            <ion-label class="cropper-title">Ajusta la Foto</ion-label>
+          </ion-list-header>
+          <image-cropper
+              [imageChangedEvent]="imageChangedEvent"
+              [maintainAspectRatio]="true"
+              [aspectRatio]="1 / 1"
+              [resizeToWidth]="1024"
+              format="jpeg"
+              (imageCropped)="imageCropped($event)"
+          ></image-cropper>
+          <div class="button-group">
+            <ion-button expand="full" (click)="confirmCrop()">Confirmar Foto</ion-button>
+            <ion-button expand="full" fill="outline" (click)="cancelCrop()">Cancelar</ion-button>
+          </div>
+        </div>
+
+        <!-- Step 3: Final Preview -->
+        <div *ngIf="croppedImage" class="image-preview-container">
+          <ion-list-header>
+            <ion-label>Vista Previa</ion-label>
+          </ion-list-header>
+          <ion-img [src]="croppedImage" class="image-preview"></ion-img>
+          <ion-button class="remove-image-button" (click)="removeImage()" fill="clear" color="danger">
+            <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+          </ion-button>
+        </div>
+    </div>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <div class="form-actions">
+    <ion-button class="clear-button" fill="outline" (click)="onClear()">
+      Limpiar
+    </ion-button>
+    <ion-button class="submit-button" type="submit" [disabled]="!adopcionForm.valid || loading" (click)="onSubmit()">
+      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+      <span *ngIf="!loading">Guardar Adopción</span>
+    </ion-button>
+  </div>
+</ion-footer>

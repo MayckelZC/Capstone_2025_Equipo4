@@ -1,0 +1,1041 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* SISTEMA DE DISEÑO PERSONALIZADO PATITAS EN CASA */
+@import "./theme/design-system.scss";
+
+/* UI/UX IMPROVEMENTS - AUDIT 2024 */
+@import "./theme/ui-improvements.scss";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* ================================================= */
+/* TRANSICIONES DE TEMA SUAVES */
+/* ================================================= */
+
+body {
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+/* Transición suave entre temas */
+body.theme-transition,
+body.theme-transition * {
+  transition: background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    fill 0.3s ease-in-out !important;
+}
+
+body.dark-theme {
+  color-scheme: dark;
+}
+
+body.light-theme {
+  color-scheme: light;
+}
+
+.custom-alert {
+  --border-radius: 16px !important;
+  --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-alert .alert-wrapper {
+  border-radius: 16px !important;
+}
+
+.custom-alert .alert-head {
+  background-color: #4CAF50;
+  padding: 16px 24px !important;
+}
+
+.custom-alert .alert-title {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 20px !important;
+}
+
+.custom-alert .alert-message {
+  padding: 20px 24px !important;
+  font-size: 16px;
+  color: #333;
+}
+
+.custom-alert .alert-button-group {
+  padding: 8px 24px 16px 24px !important;
+  justify-content: flex-end;
+}
+
+.custom-alert .alert-button {
+  border-radius: 8px !important;
+  font-weight: bold !important;
+  text-transform: none !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  margin-left: 8px !important;
+}
+
+/* Custom button styles for alerts */
+.alert-button-primary {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.alert-button-secondary {
+  background-color: transparent !important;
+  color: #4CAF50 !important;
+  border: 1px solid #4CAF50;
+}
+
+/* Estilos para el modal del cuestionario mejorado */
+.questionnaire-alert-custom {
+  --max-width: 600px;
+  --max-height: 85vh;
+}
+
+.questionnaire-alert-custom .alert-wrapper {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.questionnaire-alert-custom .alert-head {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  padding: 20px 24px !important;
+  border-bottom: none;
+}
+
+.questionnaire-alert-custom .alert-title {
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  text-align: center;
+}
+
+.questionnaire-alert-custom .alert-message {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: 20px !important;
+  background: #fafafa;
+}
+
+.questionnaire-alert-custom .alert-button-group {
+  padding: 16px 24px !important;
+  justify-content: center;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
+.questionnaire-alert-custom .alert-button.alert-button-cancel {
+  background: #4CAF50 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  padding: 12px 32px !important;
+  font-size: 14px !important;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.questionnaire-alert-custom .alert-button.alert-button-cancel:hover {
+  background: #45a049 !important;
+}
+
+/* Estilos para el modal del cuestionario detallado */
+.questionnaire-modal {
+  --width: 90%;
+  --max-width: 800px;
+  --height: 90%;
+  --border-radius: 16px;
+}
+
+@media (max-width: 768px) {
+  .questionnaire-modal {
+    --width: 100%;
+    --height: 100%;
+    --border-radius: 0;
+  }
+}
+
+
+
+.primary-button {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: none;
+  /* Eliminar cualquier sombra */
+  border: none;
+  /* Eliminar bordes */
+}
+
+.primary-button:hover {
+  background-color: #45a049;
+  transition: background-color 0.3s ease;
+  box-shadow: none;
+  /* Eliminar sombras en hover */
+}
+
+/* Quitar focos o bordes verdes adicionales */
+.primary-button:focus,
+.primary-button:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.danger-button {
+  margin-top: 20px;
+  background-color: #dc3545;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: none;
+  border: none;
+}
+
+.danger-button:hover {
+  background-color: #c82333;
+  transition: background-color 0.3s ease;
+  box-shadow: none;
+}
+
+.danger-button:focus,
+.danger-button:active {
+  outline: none;
+  box-shadow: none;
+}
+
+
+
+.secondary-button {
+  --background: transparent;
+  --color: #4CAF50;
+  --border-color: #4CAF50;
+  --border-width: 1px;
+  --border-style: solid;
+  --border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.secondary-button:hover {
+  --background: #4caf50;
+  --color: white;
+}
+
+/* ==========================================
+   SMART FILTER MODAL
+   ========================================== */
+
+.smart-filter-modal {
+  --height: 90vh;
+  --border-radius: 20px 20px 0 0;
+  --backdrop-opacity: 0.6;
+
+  .modal-wrapper {
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    --width: 500px;
+    --height: 80vh;
+    --border-radius: 20px;
+
+    .modal-wrapper {
+      border-radius: 20px;
+    }
+  }
+}
+
+/* ================================================= */
+/* MODAL DE DETALLES DE CITA - ESTILO CUESTIONARIO */
+/* ================================================= */
+
+.appointment-detail-modal {
+  --width: 90%;
+  --max-width: 500px;
+  --height: auto;
+  --max-height: 90%;
+  --border-radius: 16px;
+
+  .modal-wrapper {
+    border-radius: 16px;
+  }
+}
+
+/* ================================================= */
+/* TOASTS MEJORADOS - SISTEMA AVANZADO */
+/* ================================================= */
+
+ion-toast {
+  &.custom-toast {
+    --border-radius: 16px;
+    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --start: 16px;
+    --end: 16px;
+    backdrop-filter: blur(10px);
+
+    &::part(container) {
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    &::part(message) {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    &::part(icon) {
+      font-size: 24px;
+      margin-right: 12px;
+      animation: toastIconPulse 0.5s ease-out;
+    }
+
+    &::part(button) {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 8px;
+      margin-left: 8px;
+    }
+  }
+
+  // SUCCESS TOAST - Verde (mantener semántica universal)
+  &.toast-success {
+    --background: linear-gradient(135deg, #4CAF50 0%, #43A047 100%);
+    --color: white;
+    border-left: 4px solid #2E7D32;
+    animation: slideInTop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    &::part(icon) {
+      color: white;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+  }
+
+  // WARNING TOAST - Naranja
+  &.toast-warning {
+    --background: linear-gradient(135deg, #FF9800 0%, #FB8C00 100%);
+    --color: white;
+    border-left: 4px solid #E65100;
+    animation: slideInTop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    &::part(icon) {
+      color: white;
+      animation: toastWarningShake 0.5s ease-out;
+    }
+  }
+
+  // DANGER TOAST - Rojo con shake
+  &.toast-danger {
+    --background: linear-gradient(135deg, #F44336 0%, #E53935 100%);
+    --color: white;
+    border-left: 4px solid #C62828;
+    animation: slideInTopShake 0.5s ease-out;
+
+    &::part(icon) {
+      color: white;
+      animation: toastDangerPulse 0.6s ease-out;
+    }
+  }
+
+  // INFO TOAST - Azul
+  &.toast-info {
+    --background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    --color: white;
+    border-left: 4px solid #0D47A1;
+    animation: slideInTop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  // PRIMARY TOAST
+  &.toast-primary {
+    --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+    --color: white;
+    border-left: 4px solid var(--ion-color-primary-shade);
+    animation: slideInTop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  // TOAST CON ACCIÓN
+  &.toast-with-action {
+    &::part(button) {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  // TOAST STICKY (no auto-dismiss)
+  &.toast-sticky {
+    --border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+
+    &::part(container) {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  // TOAST MINI
+  &.toast-mini {
+    --min-height: 48px;
+
+    &::part(message) {
+      font-size: 13px;
+    }
+
+    &::part(icon) {
+      font-size: 18px;
+      margin-right: 8px;
+    }
+  }
+
+  // TOAST GRANDE
+  &.toast-large {
+    --min-height: 80px;
+
+    &::part(message) {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    &::part(icon) {
+      font-size: 32px;
+      margin-right: 16px;
+    }
+  }
+
+  // TOAST CON PROGRESO
+  &.toast-progress {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
+      animation: toastProgress var(--duration, 3s) linear forwards;
+    }
+  }
+}
+
+// ANIMACIONES DE TOASTS
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideInTopShake {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  70% {
+    transform: translateX(5px);
+  }
+
+  80% {
+    transform: translateX(-3px);
+  }
+
+  90% {
+    transform: translateX(3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastIconPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes toastWarningShake {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes toastDangerPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  25%,
+  75% {
+    transform: scale(1.2);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}
+
+// Next Steps Alert Modal
+.next-steps-alert {
+  .alert-wrapper {
+    max-width: 400px;
+  }
+
+  .alert-message {
+    max-height: none !important;
+    overflow: visible !important;
+
+    ul {
+      list-style-type: disc;
+
+      li {
+        margin: 4px 0;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// RESPONSIVE
+@media (max-width: 576px) {
+  ion-toast.custom-toast {
+    --start: 8px;
+    --end: 8px;
+
+    &::part(message) {
+      font-size: 14px;
+    }
+
+    &::part(icon) {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+/* ================================================= */
+/* MEJORAS DE ACCESIBILIDAD - UI/UX AUDIT 2024 */
+/* ================================================= */
+
+// Focus visible para navegación por teclado (WCAG 2.1 AA)
+ion-button:focus-visible,
+ion-item:focus-visible,
+ion-card:focus-visible,
+button:focus-visible,
+a:focus-visible,
+.card:focus-visible {
+  outline: 3px solid var(--ion-color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+  transition: outline 0.2s ease;
+}
+
+// Placeholders con mejor contraste (WCAG AA: 4.5:1)
+::placeholder {
+  color: var(--ion-text-color-disabled);
+  opacity: 1;
+}
+
+// Textos secundarios con mejor contraste
+.text-secondary,
+.subtitle,
+ion-label[color="medium"] {
+  color: var(--ion-text-color-secondary) !important;
+}
+
+// Skip to content para accesibilidad
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--ion-color-primary);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  z-index: 10000;
+  border-radius: 0 0 8px 0;
+  font-weight: bold;
+
+  &:focus {
+    top: 0;
+  }
+}
+
+// Mejorar contraste de estados disabled
+ion-button[disabled],
+button:disabled,
+.btn-disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+// Touch targets mínimos de 44x44px (WCAG 2.1 AA)
+ion-button,
+button,
+a.button,
+.clickable {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+// Reducir animaciones para usuarios con preferencias de movimiento reducido
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ================================================= */
+/* ANIMACIONES GLOBALES REUTILIZABLES */
+/* ================================================= */
+
+// Fade In Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// Slide In From Bottom
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Slide In From Top
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Slide In From Left
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Slide In From Right
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Scale Up Animation
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Pulse Animation
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+// Shake Animation (para errores)
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+// Bounce Animation
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ================================================= */
+/* SKELETON SCREEN STYLES */
+/* ================================================= */
+
+.skeleton {
+  background: linear-gradient(90deg,
+      var(--ion-color-light-shade) 0%,
+      var(--ion-color-light-tint) 50%,
+      var(--ion-color-light-shade) 100%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s ease-in-out infinite;
+  border-radius: var(--border-radius-md);
+
+  &.skeleton-text {
+    height: 16px;
+    margin: 8px 0;
+    border-radius: 4px;
+
+    &.skeleton-text-lg {
+      height: 24px;
+    }
+
+    &.skeleton-text-sm {
+      height: 12px;
+    }
+  }
+
+  &.skeleton-circle {
+    border-radius: 50%;
+  }
+
+  &.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  &.skeleton-thumbnail {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.dark-theme .skeleton {
+  background: linear-gradient(90deg,
+      var(--ion-color-step-150) 0%,
+      var(--ion-color-step-250) 50%,
+      var(--ion-color-step-150) 100%);
+  background-size: 200% 100%;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ================================================= */
+/* UTILITY ANIMATION CLASSES */
+/* ================================================= */
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-down {
+  animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Delays para animaciones escalonadas */
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animate-delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* ================================================= */
+/* HOVER EFFECTS Y MICROINTERACCIONES */
+/* ================================================= */
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(var(--ion-color-primary-rgb), 0.4);
+  }
+}
+
+.hover-brighten {
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+/* ================================================= */
+/* CARD IMPROVEMENTS */
+/* ================================================= */
+
+ion-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &.card-interactive {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-md);
+    }
+  }
+}
+
+/* ================================================= */
+/* LOADING STATES */
+/* ================================================= */
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dark-theme .loading-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ================================================= */
+/* SMOOTH SCROLLING */
+/* ================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

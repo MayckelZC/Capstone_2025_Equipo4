@@ -1,0 +1,249 @@
+.consultation-container {
+  padding: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+// Progress bar de pasos
+.step-progress {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--ion-color-light);
+  overflow-x: auto;
+  
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 80px;
+    
+    ion-icon {
+      font-size: 24px;
+      color: var(--ion-color-medium);
+    }
+    
+    .step-name {
+      font-size: 11px;
+      color: var(--ion-color-medium);
+      text-align: center;
+    }
+    
+    &.active {
+      background: var(--ion-color-primary);
+      
+      ion-icon,
+      .step-name {
+        color: white;
+      }
+    }
+    
+    &.completed {
+      ion-icon {
+        color: var(--ion-color-success);
+      }
+      
+      .step-name {
+        color: var(--ion-color-success);
+      }
+    }
+  }
+}
+
+// Contenido de cada paso
+.step-content {
+  animation: fadeIn 0.3s;
+  
+  h2 {
+    margin: 20px 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Alertas de signos vitales
+.vital-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  
+  ion-icon {
+    font-size: 18px;
+  }
+  
+  &.normal {
+    background: #d4edda;
+    color: #155724;
+    
+    ion-icon {
+      color: #28a745;
+    }
+  }
+  
+  &.warning {
+    background: #fff3cd;
+    color: #856404;
+    
+    ion-icon {
+      color: #ffc107;
+    }
+  }
+  
+  &.danger {
+    background: #f8d7da;
+    color: #721c24;
+    
+    ion-icon {
+      color: #dc3545;
+    }
+  }
+}
+
+.helper-text {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  margin: 4px 16px 12px;
+}
+
+// Plantillas rápidas flotantes
+.quick-templates {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 280px;
+  animation: slideIn 0.3s;
+  
+  ion-card {
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    
+    ion-button {
+      margin-top: 8px;
+      
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Grid de fotos
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  
+  .photo-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    ion-button {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      --padding-start: 6px;
+      --padding-end: 6px;
+    }
+  }
+}
+
+// Footer
+ion-footer {
+  ion-toolbar {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    display: flex;
+    align-items: center;
+    
+    .step-indicator {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .quick-templates {
+    position: static;
+    max-width: 100%;
+    margin: 16px 0;
+  }
+  
+  .step-progress .step-item {
+    min-width: 70px;
+    padding: 6px 8px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    .step-name {
+      font-size: 10px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .step-progress {
+    .step-name {
+      display: none;
+    }
+    
+    .step-item {
+      min-width: 50px;
+    }
+  }
+  
+  ion-footer .step-indicator {
+    font-size: 12px;
+  }
+}

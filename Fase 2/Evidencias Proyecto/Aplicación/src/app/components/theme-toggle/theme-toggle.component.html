@@ -1,0 +1,80 @@
+<ion-button 
+  (click)="toggleTheme()" 
+  fill="clear"
+  class="theme-toggle-button"
+  [attr.aria-label]="(isDarkMode$ | async) ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+>
+  <ion-icon 
+    slot="icon-only" 
+    [name]="(isDarkMode$ | async) ? 'sunny' : 'moon'"
+    class="theme-icon"
+  ></ion-icon>
+</ion-button>
+
+<!-- Versión con menú de opciones (light/dark/system) -->
+<!-- 
+<ion-button 
+  id="theme-menu-trigger" 
+  fill="clear"
+  class="theme-toggle-button"
+>
+  <ion-icon 
+    slot="icon-only" 
+    [name]="(isDarkMode$ | async) ? 'moon' : 'sunny'"
+    class="theme-icon"
+  ></ion-icon>
+</ion-button>
+
+<ion-popover trigger="theme-menu-trigger" triggerAction="click">
+  <ng-template>
+    <ion-content class="theme-menu-content">
+      <ion-list lines="none">
+        <ion-item 
+          button 
+          (click)="setPreference('light')"
+          [class.selected]="(currentPreference$ | async) === 'light'"
+        >
+          <ion-icon name="sunny" slot="start"></ion-icon>
+          <ion-label>Modo Claro</ion-label>
+          <ion-icon 
+            name="checkmark" 
+            slot="end" 
+            *ngIf="(currentPreference$ | async) === 'light'"
+            color="primary"
+          ></ion-icon>
+        </ion-item>
+        
+        <ion-item 
+          button 
+          (click)="setPreference('dark')"
+          [class.selected]="(currentPreference$ | async) === 'dark'"
+        >
+          <ion-icon name="moon" slot="start"></ion-icon>
+          <ion-label>Modo Oscuro</ion-label>
+          <ion-icon 
+            name="checkmark" 
+            slot="end" 
+            *ngIf="(currentPreference$ | async) === 'dark'"
+            color="primary"
+          ></ion-icon>
+        </ion-item>
+        
+        <ion-item 
+          button 
+          (click)="setPreference('system')"
+          [class.selected]="(currentPreference$ | async) === 'system'"
+        >
+          <ion-icon name="phone-portrait" slot="start"></ion-icon>
+          <ion-label>Sistema</ion-label>
+          <ion-icon 
+            name="checkmark" 
+            slot="end" 
+            *ngIf="(currentPreference$ | async) === 'system'"
+            color="primary"
+          ></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>
+-->

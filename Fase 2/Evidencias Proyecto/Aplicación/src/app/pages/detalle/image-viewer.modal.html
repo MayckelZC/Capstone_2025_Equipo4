@@ -1,0 +1,24 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="prev()" [disabled]="!(images && images.length && current > 0)">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ (current + 1) + '/' + (images?.length || 0) }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="next()" [disabled]="!(images && images.length && current < images.length - 1)">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="image-viewer" (swipeleft)="next()" (swiperight)="prev()">
+  <div class="image-wrap">
+    <img [src]="currentImage || 'assets/imgs/default-dog.png'" alt="Imagen" />
+  </div>
+</ion-content>

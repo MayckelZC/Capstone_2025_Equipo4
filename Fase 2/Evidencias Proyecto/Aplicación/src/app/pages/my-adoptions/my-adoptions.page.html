@@ -1,0 +1,245 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Mis Solicitudes Enviadas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" routerLink="/received-requests">
+        <ion-icon name="mail-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshRequests($event)">
+    <ion-refresher-content
+      pullingText="Desliza para actualizar"
+      refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Estadísticas -->
+  <div class="stats-grid">
+    <div class="stat-card total">
+      <ion-icon name="paper-plane-outline"></ion-icon>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.total }}</div>
+        <div class="stat-label">Total Enviadas</div>
+      </div>
+    </div>
+    <div class="stat-card pending">
+      <ion-icon name="time-outline"></ion-icon>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.pending }}</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+    </div>
+    <div class="stat-card approved">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.approved }}</div>
+        <div class="stat-label">Aprobadas</div>
+      </div>
+    </div>
+    <div class="stat-card rejected">
+      <ion-icon name="close-circle-outline"></ion-icon>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.rejected }}</div>
+        <div class="stat-label">Rechazadas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-section">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionChange)="filterRequests()"
+      placeholder="Buscar por nombre de mascota..."
+      animated>
+    </ion-searchbar>
+
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged($event)" color="tertiary">
+      <ion-segment-button value="all">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="pending">
+        <ion-label>Pendientes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="approved">
+        <ion-label>Aprobadas</ion-label>
+        <ion-badge *ngIf="newApprovedCount > 0" color="success">{{ newApprovedCount }}</ion-badge>
+      </ion-segment-button>
+      <ion-segment-button value="rejected">
+        <ion-label>Rechazadas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        <ion-label>Completadas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando solicitudes...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && allRequests.length === 0" class="empty-state">
+    <div class="empty-icon-container">
+      <ion-icon name="paper-plane-outline" class="empty-icon"></ion-icon>
+      <div class="paw-decoration">
+        <ion-icon name="paw"></ion-icon>
+      </div>
+    </div>
+    <h3>No has enviado solicitudes</h3>
+    <p>Aún no has realizado ninguna solicitud de adopción.</p>
+    <ion-button expand="block" routerLink="/home" class="explore-button">
+      <ion-icon name="paw-outline" slot="start"></ion-icon>
+      Explorar Mascotas
+    </ion-button>
+  </div>
+
+  <!-- No Results State -->
+  <div *ngIf="!isLoading && allRequests.length > 0 && filteredRequests.length === 0" class="empty-state">
+    <ion-icon name="search-outline"></ion-icon>
+    <h3>No hay resultados</h3>
+    <p>No se encontraron solicitudes con los filtros aplicados.</p>
+  </div>
+
+  <!-- Lista de Solicitudes -->
+  <div class="requests-container" *ngIf="!isLoading && filteredRequests.length > 0">
+    <ion-card *ngFor="let request of filteredRequests" class="request-card">
+      
+      <!-- Banner de Coordinación (Solo para aprobadas) -->
+      <div class="coordination-banner" *ngIf="request.status === 'approved'">
+        <div class="banner-icon">
+          <ion-icon name="call"></ion-icon>
+        </div>
+        <div class="banner-content">
+          <h3>¡Solicitud Aprobada! 🎉</h3>
+          <p>Contacta directamente a {{ request.ownerName || 'el publicador' }} para coordinar la entrega de {{ request.petName }}</p>
+          <div class="banner-actions">
+            <ion-button size="small" fill="solid" color="success" [href]="getWhatsAppLink(request.ownerPhone)" target="_blank" *ngIf="request.ownerPhone">
+              <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+              WhatsApp
+            </ion-button>
+            <ion-button size="small" fill="solid" color="primary" [href]="'tel:' + request.ownerPhone" *ngIf="request.ownerPhone">
+              <ion-icon name="call" slot="start"></ion-icon>
+              Llamar
+            </ion-button>
+            <ion-button size="small" fill="solid" color="tertiary" [href]="'mailto:' + request.ownerEmail" *ngIf="request.ownerEmail">
+              <ion-icon name="mail" slot="start"></ion-icon>
+              Email
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header con Mascota -->
+      <div class="card-header">
+        <img [src]="request.petImageUrl" class="pet-image" (click)="goToPetDetails(request.petId)"/>
+        <div class="pet-info">
+          <h2 class="pet-name" (click)="goToPetDetails(request.petId)">{{ request.petName }}</h2>
+          <ion-badge [color]="getStatusColor(request.status)" class="status-badge">
+            {{ getStatusText(request.status) }}
+          </ion-badge>
+          <ion-badge *ngIf="request.isNew" color="warning" class="new-badge">
+            <ion-icon name="sparkles-outline"></ion-icon>
+            Nuevo
+          </ion-badge>
+        </div>
+      </div>
+
+      <!-- Información de la Solicitud -->
+      <ion-card-content>
+        <div class="info-row">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ getTimeAgo(request.requestDate) }}</span>
+        </div>
+
+        <!-- Iconos de contacto -->
+        <div class="contact-icons" *ngIf="request.ownerPhone || request.ownerEmail">
+          <ion-button fill="clear" size="small" (click)="goToOwnerProfile(request)" class="contact-icon-btn">
+            <ion-icon name="person-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" size="small" (click)="callOwner(request)" *ngIf="request.ownerPhone" class="contact-icon-btn">
+            <ion-icon name="call" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" size="small" (click)="whatsappOwner(request)" *ngIf="request.ownerPhone" class="contact-icon-btn">
+            <ion-icon name="logo-whatsapp" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" size="small" (click)="emailOwner(request)" *ngIf="request.ownerEmail" class="contact-icon-btn">
+            <ion-icon name="mail" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card-content>
+
+      <!-- Acciones -->
+      <div class="card-actions">
+        <ion-button fill="clear" size="small" (click)="viewMyQuestionnaire(request)">
+          <ion-icon name="document-text-outline" slot="start"></ion-icon>
+          Mi Cuestionario
+        </ion-button>
+        
+        <ion-button fill="clear" size="small" (click)="goToPetDetails(request.petId)">
+          <ion-icon name="paw-outline" slot="start"></ion-icon>
+          Ver Mascota
+        </ion-button>
+      </div>
+
+      <!-- Delivery Confirmation Section (For Approved Requests) -->
+      <div class="delivery-confirmation-section" *ngIf="request.status === 'approved'">
+        <div class="delivery-status-info">
+          <h4>Estado de Confirmación de Entrega</h4>
+          <div class="confirmation-grid">
+            <div class="confirmation-item" [class.confirmed]="request.ownerDeliveryConfirmedAt">
+              <ion-icon [name]="request.ownerDeliveryConfirmedAt ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+              <span>Publicador {{ request.ownerDeliveryConfirmedAt ? 'confirmó' : 'pendiente' }}</span>
+              <small *ngIf="request.ownerDeliveryConfirmedAt">{{ request.ownerDeliveryConfirmedAt | date:'short' }}</small>
+            </div>
+            <div class="confirmation-item" [class.confirmed]="request.adopterDeliveryConfirmedAt">
+              <ion-icon [name]="request.adopterDeliveryConfirmedAt ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+              <span>Adoptante {{ request.adopterDeliveryConfirmedAt ? 'confirmó' : 'pendiente' }}</span>
+              <small *ngIf="request.adopterDeliveryConfirmedAt">{{ request.adopterDeliveryConfirmedAt | date:'short' }}</small>
+            </div>
+          </div>
+        </div>
+
+        <ion-button 
+          expand="block"
+          fill="solid" 
+          color="success"
+          size="small" 
+          (click)="confirmarEntrega(request)"
+          class="confirm-delivery-btn"
+          *ngIf="!request.adopterDeliveryConfirmedAt">
+          <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+          CONFIRMAR ENTREGA (ADOPTANTE)
+        </ion-button>
+
+        <div class="delivery-confirmed-message" *ngIf="request.adopterDeliveryConfirmedAt">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <p>Has confirmado la entrega. Esperando confirmación del publicador.</p>
+        </div>
+      </div>
+
+      <!-- Receipt PDF for completed adoptions -->
+      <div class="receipt-section" *ngIf="request.status === 'completed' && request.receiptPdfUrl">
+        <h4>Recibo de Entrega Generado</h4>
+        <ion-button 
+          expand="block"
+          fill="outline" 
+          color="primary"
+          size="small" 
+          (click)="viewReceipt(request.receiptPdfUrl)">
+          <ion-icon name="document-text-outline" slot="start"></ion-icon>
+          VER RECIBO DE ADOPCIÓN
+        </ion-button>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>
