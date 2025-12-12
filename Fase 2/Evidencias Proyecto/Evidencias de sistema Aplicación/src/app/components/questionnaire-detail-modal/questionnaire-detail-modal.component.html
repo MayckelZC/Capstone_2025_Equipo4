@@ -1,0 +1,193 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>{{ showOwnerContact ? 'Mi Cuestionario de Adopción' : ('Cuestionario de ' + (request.requester?.name || 'Solicitante')) }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="questionnaire-content">
+  <div class="questionnaire-container">
+    
+    <!-- Sección: Vivienda y Seguridad -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="home" class="section-icon"></ion-icon>
+        <h2 class="section-title">VIVIENDA Y SEGURIDAD</h2>
+      </div>
+      
+      <div class="section-body">
+        <div class="info-row">
+          <span class="info-label">📌 Tipo de vivienda</span>
+          <span class="info-value">
+            {{ request.housingType === 'own' ? '✅ Casa Propia' : '🏘️ Casa Alquilada' }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="request.housingType === 'rented' && request.landlordAllowsPets !== undefined">
+          <span class="info-label">📌 El propietario permite mascotas</span>
+          <span class="info-value">
+            {{ request.landlordAllowsPets ? '✅ Sí' : '❌ No' }}
+          </span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Jardín seguro</span>
+          <span class="info-value">
+            {{ request.secureFencing ? '✅ Sí, tiene jardín seguro' : '❌ No tiene jardín seguro' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Estilo de Vida -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="paw" class="section-icon"></ion-icon>
+        <h2 class="section-title">ESTILO DE VIDA</h2>
+      </div>
+      
+      <div class="section-body">
+        <div class="info-row">
+          <span class="info-label">📌 Espacio disponible</span>
+          <span class="info-value">{{ getSpaceText(request.petLivingSpace) }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="request.petLivingSpaceOther">
+          <span class="info-label">📌 Detalles del espacio</span>
+          <span class="info-value">{{ request.petLivingSpaceOther }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Horas que la mascota estaría sola</span>
+          <span class="info-value">⏰ {{ request.hoursAlone || 'No especificado' }} horas al día</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Miembros del hogar</span>
+          <span class="info-value">👥 {{ request.householdMembers || 'No especificado' }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Alergias en el hogar</span>
+          <span class="info-value">
+            {{ request.allergies === 'yes' ? '⚠️ Sí, hay personas con alergias' : request.allergies === 'no' ? '✅ No hay alergias' : '❓ No especificado' }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="request.petFood">
+          <span class="info-label">📌 Tipo de alimentación planeada</span>
+          <span class="info-value">{{ request.petFood }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Experiencia con Mascotas -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="book" class="section-icon"></ion-icon>
+        <h2 class="section-title">EXPERIENCIA CON MASCOTAS</h2>
+      </div>
+      
+      <div class="section-body">
+        <div class="info-row">
+          <span class="info-label">📌 Experiencia previa con mascotas</span>
+          <span class="info-value">
+            {{ request.previousExperience ? '✅ Sí, tiene experiencia' : '⚠️ No tiene experiencia previa' }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="request.previousExperienceDetails">
+          <span class="info-label">📌 Detalles de experiencia previa</span>
+          <span class="info-value">{{ request.previousExperienceDetails }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Otras mascotas en el hogar</span>
+          <span class="info-value">
+            {{ request.otherPets ? '🐕 Sí, tiene otras mascotas' : '🏠 No tiene otras mascotas' }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="request.otherPetsDetails">
+          <span class="info-label">📌 Detalles de otras mascotas</span>
+          <span class="info-value">{{ request.otherPetsDetails }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">📌 Acceso a atención veterinaria</span>
+          <span class="info-value">
+            {{ request.veterinaryAccess ? '✅ Sí, tiene acceso confirmado' : '❌ No tiene acceso confirmado' }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="request.unexpectedExpenses !== undefined">
+          <span class="info-label">📌 Gastos veterinarios inesperados</span>
+          <span class="info-value">
+            {{ request.unexpectedExpenses ? '✅ Dispuesto a cubrir gastos inesperados' : '⚠️ No puede cubrir gastos inesperados' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Comentarios Adicionales (si existen) -->
+    <div class="section-card" *ngIf="request.longTermCommitment">
+      <div class="section-header">
+        <ion-icon name="heart" class="section-icon"></ion-icon>
+        <h2 class="section-title">¿Qué harías si no pudieras seguir cuidando a la mascota?</h2>
+      </div>
+      
+      <div class="section-body">
+        <p class="comments-text">{{ request.longTermCommitment }}</p>
+      </div>
+    </div>
+
+    <!-- Notas del Administrador -->
+    <div class="section-card" *ngIf="request.adminNotes">
+      <div class="section-header">
+        <ion-icon name="chatbubble-ellipses" class="section-icon"></ion-icon>
+        <h2 class="section-title">COMENTARIOS ADICIONALES</h2>
+      </div>
+      
+      <div class="section-body">
+        <p class="comments-text">{{ request.adminNotes }}</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+
+<ion-footer>
+  <!-- Sección de Contacto con el Publicador (solo cuando showOwnerContact es true) -->
+  <div class="owner-contact-section" *ngIf="showOwnerContact">
+    <div *ngIf="request.owner" class="contact-container">
+      <div class="contact-header">
+        <ion-icon name="call-outline"></ion-icon>
+        <span>Contactar al publicador</span>
+      </div>
+      <div class="contact-buttons">
+        <ion-button fill="clear" (click)="callOwner()" *ngIf="request.owner.phone" title="Llamar">
+          <ion-icon name="call" slot="icon-only" color="primary"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="whatsappOwner()" *ngIf="request.owner.whatsapp" title="WhatsApp">
+          <ion-icon name="logo-whatsapp" slot="icon-only" color="success"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="emailOwner()" *ngIf="request.owner.email" title="Email">
+          <ion-icon name="mail" slot="icon-only" color="warning"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+    <div *ngIf="!request.owner" style="padding: 16px; text-align: center; color: #999;">
+      No hay información de contacto disponible
+    </div>
+  </div>
+
+  <ion-toolbar>
+    <ion-button expand="block" color="success" (click)="dismiss()" class="close-button">
+      CERRAR
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Solicitudes de Adopción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando solicitudes...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div *ngIf="requests.length === 0" class="empty-state">
+      <div class="empty-icon-wrapper">
+        <ion-icon name="checkmark-done-circle-outline"></ion-icon>
+      </div>
+      <h3 class="empty-title">Sin solicitudes</h3>
+      <p class="empty-message">No hay solicitudes de adopción pendientes por revisar.</p>
+    </div>
+
+    <ion-card *ngFor="let request of requests">
+      <ion-item lines="none">
+        <ion-thumbnail slot="start">
+          <img [src]="request.petImageUrl" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2 (click)="goToPetDetails(request.petId)">
+            <ion-text color="primary">{{ request.petName }}</ion-text>
+          </h2>
+          <p>Solicitado por: <strong (click)="goToApplicantProfile(request.applicantId)">
+              <ion-text color="secondary">{{ request.applicantName }}</ion-text>
+            </strong></p>
+          <p>Fecha: {{ request.requestDate | date:'medium' }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-row class="ion-justify-content-end">
+        <ion-button fill="clear" color="danger" (click)="reject(request)">
+          Rechazar
+        </ion-button>
+        <ion-button fill="clear" color="success" (click)="approve(request)">
+          Aprobar
+        </ion-button>
+      </ion-row>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,58 @@
+:host {
+    display: inline-block;
+}
+
+.theme-toggle-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 44px;
+    width: 44px;
+    margin: 0;
+
+    ion-icon.theme-icon {
+        font-size: 24px;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.2s ease;
+    }
+
+    &:hover ion-icon.theme-icon {
+        transform: rotate(20deg) scale(1.1);
+    }
+
+    &:active ion-icon.theme-icon {
+        transform: rotate(20deg) scale(0.95);
+    }
+}
+
+// Animación especial al cambiar de tema
+@keyframes themeIconSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.theme-menu-content {
+    --background: var(--ion-background-color);
+    --color: var(--ion-text-color);
+
+    ion-list {
+        background: transparent;
+
+        ion-item {
+            --background: transparent;
+            --color: var(--ion-text-color);
+
+            &.selected {
+                --background: rgba(var(--ion-color-primary-rgb), 0.1);
+            }
+
+            &:hover {
+                --background: rgba(var(--ion-color-primary-rgb), 0.05);
+            }
+        }
+    }
+}

@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin/users"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Editar Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="editUserForm && !loading">
+    <ion-card-header>
+      <ion-card-title>Detalles del Usuario</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
+
+        <ion-item lines="none">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Nombre Completo <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="nombreCompleto"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="editUserForm.get('nombreCompleto')?.touched && editUserForm.get('nombreCompleto')?.errors?.['required']">
+          El nombre completo es requerido.
+        </ion-text>
+
+        <ion-item lines="none">
+          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Nombre de Usuario <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="nombreUsuario"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="editUserForm.get('nombreUsuario')?.touched && editUserForm.get('nombreUsuario')?.errors?.['required']">
+          El nombre de usuario es requerido.
+        </ion-text>
+
+        <ion-item lines="none">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Email <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="email" type="email"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="editUserForm.get('email')?.touched && editUserForm.get('email')?.errors?.['required']">
+          El email es requerido.
+        </ion-text>
+        <ion-text color="danger" *ngIf="editUserForm.get('email')?.touched && editUserForm.get('email')?.errors?.['email']">
+          Formato de email inválido.
+        </ion-text>
+
+        <ion-item lines="none">
+          <ion-icon name="call-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Teléfono <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="telefono" type="tel"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="editUserForm.get('telefono')?.touched && editUserForm.get('telefono')?.errors?.['required']">
+          El teléfono es requerido.
+        </ion-text>
+
+        <ion-item lines="none">
+          <ion-icon name="location-outline" slot="start"></ion-icon>
+          <ion-label position="floating">Dirección <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="direccion"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="editUserForm.get('direccion')?.touched && editUserForm.get('direccion')?.errors?.['required']">
+          La dirección es requerida.
+        </ion-text>
+
+        <!-- Control de Roles y Estados -->
+        <ion-item lines="none">
+          <ion-icon name="ribbon-outline" slot="start"></ion-icon>
+          <ion-label>Rol</ion-label>
+          <ion-select formControlName="role" interface="popover">
+            <ion-select-option value="individual">Individual</ion-select-option>
+            <ion-select-option value="organization">Organización</ion-select-option>
+            <ion-select-option value="veterinarian">Veterinario</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="shield-outline" slot="start"></ion-icon>
+          <ion-label>Administrador</ion-label>
+          <ion-toggle slot="end" formControlName="isAdmin"></ion-toggle>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="ban-outline" slot="start"></ion-icon>
+          <ion-label>Bloqueado</ion-label>
+          <ion-toggle slot="end" formControlName="isBlocked"></ion-toggle>
+        </ion-item>
+
+        <!-- Profile Image Upload -->
+        <ion-item lines="none">
+          <ion-icon name="image-outline" slot="start"></ion-icon>
+          <ion-label>Imagen de Perfil</ion-label>
+          <input type="file" (change)="handleFileInput($event)" accept="image/*" style="display: none;" #fileInput />
+          <ion-button slot="end" fill="outline" (click)="fileInput.click()">Seleccionar</ion-button>
+          <ion-button slot="end" fill="outline" (click)="takePicture()">
+            <ion-icon name="camera-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <div *ngIf="previewImage" class="image-preview-container">
+          <img [src]="previewImage" class="image-preview" />
+        </div>
+
+        <div class="ion-padding">
+          <ion-button expand="block" type="submit" [disabled]="editUserForm.invalid || loading" class="primary-button">
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">Guardar Cambios</span>
+          </ion-button>
+        </div>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando usuario...</p>
+  </div>
+</ion-content>

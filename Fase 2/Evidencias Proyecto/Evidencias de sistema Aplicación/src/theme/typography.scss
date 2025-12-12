@@ -1,0 +1,364 @@
+/**
+ * TIPOGRAFÍA FLUIDA - PATITAS EN CASA
+ * Sistema tipográfico responsive con clamp() y efectos visuales
+ */
+
+/* ==========================================
+   VARIABLES TIPOGRÁFICAS FLUIDAS
+   ========================================== */
+
+:root {
+    /* Tamaños fluidos con clamp() */
+    --font-size-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+    --font-size-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+    --font-size-base: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
+    --font-size-lg: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
+    --font-size-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    --font-size-3xl: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem);
+    --font-size-4xl: clamp(2.25rem, 1.8rem + 2vw, 3.5rem);
+    --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 4.5rem);
+
+    /* Line heights optimizados */
+    --line-height-tight: 1.2;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+
+    /* Letter spacing */
+    --letter-spacing-tighter: -0.05em;
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+    --letter-spacing-wider: 0.05em;
+    --letter-spacing-widest: 0.1em;
+}
+
+/* ==========================================
+   CLASES DE TAMAÑO
+   ========================================== */
+
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-base {
+    font-size: var(--font-size-base);
+}
+
+.text-lg {
+    font-size: var(--font-size-lg);
+}
+
+.text-xl {
+    font-size: var(--font-size-xl);
+}
+
+.text-2xl {
+    font-size: var(--font-size-2xl);
+}
+
+.text-3xl {
+    font-size: var(--font-size-3xl);
+}
+
+.text-4xl {
+    font-size: var(--font-size-4xl);
+}
+
+.text-5xl {
+    font-size: var(--font-size-5xl);
+}
+
+/* ==========================================
+   TÍTULOS CON EFECTOS VISUALES
+   ========================================== */
+
+.display-title {
+    font-size: var(--font-size-4xl);
+    font-weight: 900;
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+
+    background: linear-gradient(135deg,
+            var(--ion-color-primary) 0%,
+            var(--ion-color-secondary) 50%,
+            var(--ion-color-tertiary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    position: relative;
+
+    &::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background: linear-gradient(135deg, #4CAF50, #66BB6A);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: blur(20px);
+        opacity: 0.5;
+    }
+}
+
+.gradient-text {
+    background: linear-gradient(135deg,
+            var(--ion-color-primary),
+            var(--ion-color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-animated {
+    background: linear-gradient(-45deg,
+            var(--ion-color-primary),
+            var(--ion-color-secondary),
+            var(--ion-color-tertiary),
+            var(--ion-color-success));
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease infinite;
+}
+
+/* ==========================================
+   ANIMACIONES DE TEXTO
+   ========================================== */
+
+.animated-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: textReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Animación escalonada para múltiples elementos */
+.staggered-text {
+    >* {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: textReveal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+        @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+                animation-delay: #{$i * 0.1}s;
+            }
+        }
+    }
+}
+
+.text-glow {
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   ESTILOS DE PÁRRAFO
+   ========================================== */
+
+.paragraph-readable {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--ion-text-color);
+    max-width: 65ch;
+    /* Óptimo para lectura */
+}
+
+.paragraph-compact {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+}
+
+.paragraph-loose {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-loose);
+}
+
+/* ==========================================
+   ÉNFASIS Y DESTACADOS
+   ========================================== */
+
+.text-highlight {
+    position: relative;
+    display: inline-block;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30%;
+        background: rgba(var(--ion-color-primary-rgb), 0.3);
+        z-index: -1;
+    }
+}
+
+.text-underline-animated {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--ion-color-primary);
+        transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+        width: 100%;
+    }
+}
+
+/* ==========================================
+   LISTAS ESTILIZADAS
+   ========================================== */
+
+.list-styled {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 0.75rem;
+
+        &::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--ion-color-success);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    }
+}
+
+.list-numbered-styled {
+    list-style: none;
+    counter-reset: item;
+    padding-left: 0;
+
+    li {
+        position: relative;
+        padding-left: 2.5rem;
+        margin-bottom: 1rem;
+        counter-increment: item;
+
+        &::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--ion-color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+    }
+}
+
+/* ==========================================
+   CITAS Y BLOQUES
+   ========================================== */
+
+.blockquote-styled {
+    position: relative;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    background: rgba(var(--ion-color-primary-rgb), 0.05);
+    border-left: 4px solid var(--ion-color-primary);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+
+    &::before {
+        content: '"';
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        font-size: 4rem;
+        color: var(--ion-color-primary);
+        opacity: 0.2;
+        line-height: 1;
+    }
+}
+
+/* ==========================================
+   BADGES Y ETIQUETAS
+   ========================================== */
+
+.text-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    border-radius: 9999px;
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+    color: var(--ion-color-primary);
+}
+
+.text-tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border-radius: 4px;
+    background: var(--ion-color-light);
+    color: var(--ion-color-dark);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+    .display-title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .paragraph-readable {
+        max-width: 100%;
+    }
+}
+
+/* ==========================================
+   MODO OSCURO
+   ========================================== */
+
+
+
+/* ==========================================
+   ACCESIBILIDAD
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .animated-text,
+    .staggered-text>*,
+    .text-glow,
+    .gradient-text-animated {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

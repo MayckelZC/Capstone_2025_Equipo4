@@ -1,0 +1,508 @@
+/* Estilo para la tarjeta de adopción de mascotas */
+.pet-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin: 12px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease, 
+              opacity 0.3s ease;
+  background-color: var(--ion-color-surface);
+  position: relative;
+  animation: fadeInUp 0.6s ease-out backwards;
+  border: none;
+}
+
+.pet-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.image-container {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.12) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  ion-skeleton-text {
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+}
+
+.status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  background: linear-gradient(135deg, var(--ion-color-success) 0%, #27ae60 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 16px rgba(46, 204, 113, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  ion-icon {
+    font-size: 1rem;
+    animation: pulse-icon 2s ease-in-out infinite;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.time-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  ion-icon {
+    font-size: 0.95rem;
+  }
+}
+
+.status-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  font-weight: bold;
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.pet-card ion-img,
+.pet-card img.pet-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.pet-card ion-card-header {
+  background: var(--ion-color-surface);
+  color: var(--ion-text-color);
+  padding: 18px 18px 12px;
+  text-align: left;
+  position: relative;
+}
+
+.card-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.title-section {
+  flex: 1;
+}
+
+.publisher-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 193, 7, 0.25);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+  transition: all 0.3s ease;
+
+  ion-icon {
+    color: var(--ion-color-warning);
+    font-size: 1.1rem;
+  }
+
+  span {
+    color: var(--ion-text-color);
+    letter-spacing: -0.2px;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.25) 0%, rgba(255, 193, 7, 0.15) 100%);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.25);
+  }
+}
+
+.match-indicator {
+  margin-top: 10px;
+  padding: 10px 0;
+
+  ion-progress-bar {
+    margin-bottom: 6px;
+    border-radius: 8px;
+    height: 6px;
+    --background: rgba(46, 204, 113, 0.15);
+    --ion-color-success: linear-gradient(90deg, var(--ion-color-success), #27ae60);
+  }
+
+  .match-text {
+    font-size: 0.8rem;
+    color: var(--ion-color-success);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.action-btn {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 40px;
+  width: 40px;
+  --color: var(--ion-color-primary);
+  --background: transparent;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  border-radius: 50%;
+
+  &:hover {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1);
+    transform: scale(1.05);
+  }
+
+  .favorite-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .favorite-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, var(--ion-color-danger) 0%, #c0392b 100%);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 3px 8px rgba(192, 57, 43, 0.35);
+    min-width: 20px;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.action-btn.is-favorite {
+  --background: linear-gradient(135deg, var(--ion-color-danger) 0%, #c0392b 100%);
+  --color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(192, 57, 43, 0.35);
+
+  ion-icon {
+    color: white;
+    animation: heartBeat 0.6s ease;
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.15);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.action-btn ion-spinner {
+  width: 24px;
+  height: 24px;
+  color: var(--ion-color-danger);
+}
+
+.verified-badge {
+  vertical-align: middle;
+  margin-left: 6px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.pet-card ion-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ion-text-color);
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pet-card ion-card-subtitle {
+  font-size: 0.95rem;
+  margin: 5px 0 0;
+  font-weight: 500;
+  color: var(--ion-text-color-secondary);
+  letter-spacing: -0.2px;
+}
+
+.location-badge {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  color: var(--ion-text-color-secondary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  ion-icon {
+    margin-right: 5px;
+    font-size: 1rem;
+    color: var(--ion-color-primary);
+  }
+
+  span {
+    letter-spacing: -0.2px;
+  }
+
+  &:hover {
+    color: var(--ion-color-primary);
+
+    ion-icon {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.pet-card ion-card-content {
+  background-color: var(--ion-color-surface);
+  color: var(--ion-text-color);
+  padding: 0 18px 12px;
+  font-size: 0.95rem;
+  text-align: left;
+
+  .description-text {
+    margin: 0;
+    color: var(--ion-text-color-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    letter-spacing: -0.1px;
+  }
+}
+
+.attributes-section {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.key-attributes {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.attribute-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ion-color-medium-shade, #666);
+  gap: 6px;
+  transition: all 0.2s ease;
+
+  ion-icon {
+    font-size: 1.8rem;
+    color: var(--ion-color-primary);
+    transition: transform 0.2s ease;
+  }
+
+  span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.1px;
+  }
+
+  &:hover {
+    ion-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+}
+
+.health-attributes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  ion-chip {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    height: 28px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    --border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 18px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cta-hint {
+  font-size: 0.8rem;
+  color: var(--ion-text-color-secondary);
+  margin: -6px 0 2px;
+  letter-spacing: -0.1px;
+  font-weight: 500;
+}
+
+.details-button,
+.confirm-handover-button {
+  --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+  --color: var(--ion-color-primary-contrast);
+  --border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  width: 100%;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.25);
+  border: none;
+}
+
+.details-button {
+  --ripple-color: rgba(255, 255, 255, 0.5);
+}
+
+.details-button:hover {
+  --background: linear-gradient(135deg, var(--ion-color-primary-shade) 0%, var(--ion-color-primary) 100%);
+  box-shadow: 0 10px 28px rgba(var(--ion-color-primary-rgb), 0.4);
+  transform: translateY(-2px);
+}
+
+.confirm-handover-button {
+  --background: linear-gradient(135deg, var(--ion-color-success) 0%, #27ae60 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px rgba(46, 204, 113, 0.25);
+
+  ion-icon {
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    box-shadow: 0 10px 28px rgba(46, 204, 113, 0.4);
+    transform: translateY(-2px);
+  }
+}

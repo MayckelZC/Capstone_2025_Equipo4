@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Administrar Mascotas</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="applyFiltersAndSort()" showClearButton="always"
+      placeholder="Buscar mascotas..."></ion-searchbar>
+    <ion-segment [(ngModel)]="currentFilter" (ionChange)="applyFiltersAndSort()">
+      <ion-segment-button value="all">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="available">
+        <ion-label>Disponibles</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="adopted">
+        <ion-label>Adoptadas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="visible">
+        <ion-label>Visibles</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="hidden">
+        <ion-label>Ocultas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <ion-item lines="none">
+      <ion-label>Ordenar por:</ion-label>
+      <ion-select [(ngModel)]="currentSort" (ionChange)="applyFiltersAndSort()" interface="popover">
+        <ion-select-option value="nameAsc">Nombre (A-Z)</ion-select-option>
+        <ion-select-option value="nameDesc">Nombre (Z-A)</ion-select-option>
+        <ion-select-option value="dateDesc">Más recientes</ion-select-option>
+        <ion-select-option value="dateAsc">Más antiguas</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card *ngFor="let pet of filteredPets; trackBy: trackByPetId" [ngClass]="{'pet-hidden': pet.isHidden}">
+      <ion-item lines="none">
+        <ion-thumbnail slot="start">
+          <img [src]="pet.urlImagen" loading="lazy">
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ pet.nombre }}
+            <ion-icon name="eye-off-outline" color="medium" *ngIf="pet.isHidden"></ion-icon>
+          </h2>
+          <p>Publicado por: {{ pet.creador?.nombreCompleto || 'N/A' }}</p>
+          <p>Fecha: {{ pet.createdAt | date:'dd/MM/yyyy' || 'N/A' }}</p>
+          <div class="status-badge-admin"
+            [ngStyle]="{'background': pet.status === 'adopted' ? 'var(--ion-color-success)' : 'var(--ion-color-primary)'}">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            {{ pet.status === 'adopted' ? 'Adoptado' : 'Disponible' }}
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-grid class="action-buttons">
+        <ion-row>
+          <ion-col>
+            <ion-button fill="clear" color="primary" (click)="editPet(pet)">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button fill="clear" [color]="pet.isHidden ? 'success' : 'warning'" (click)="togglePetVisibility(pet)">
+              <ion-icon slot="icon-only" [name]="pet.isHidden ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button fill="clear" color="danger" (click)="deletePet(pet.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-list>
+
+  <div *ngIf="filteredPets.length === 0" class="empty-state">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="paw-outline"></ion-icon>
+    </div>
+    <h3 class="empty-title">No se encontraron mascotas</h3>
+    <p class="empty-message">Parece que no hay mascotas que coincidan con tu búsqueda. <br> ¡Intenta con otros filtros!
+    </p>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más mascotas...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

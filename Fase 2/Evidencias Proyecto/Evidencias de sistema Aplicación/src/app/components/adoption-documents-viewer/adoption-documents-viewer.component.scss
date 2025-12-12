@@ -1,0 +1,154 @@
+.documents-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.document-section {
+  margin-bottom: 32px;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    margin: 0 0 16px 0;
+
+    ion-icon {
+      font-size: 28px;
+    }
+  }
+}
+
+.document-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &.commitment-card {
+    border-left: 4px solid var(--ion-color-primary);
+  }
+
+  &.agreement-card {
+    border-left: 4px solid var(--ion-color-secondary);
+  }
+
+  &.receipt-card {
+    border-left: 4px solid var(--ion-color-success);
+  }
+
+  ::ng-deep ion-card-header {
+    ion-card-subtitle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--ion-text-color-secondary);
+      margin-bottom: 6px;
+
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ion-text-color);
+    }
+  }
+
+  ::ng-deep ion-card-content {
+    .doc-info {
+      background: rgba(0, 0, 0, 0.02);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+
+      p {
+        margin: 6px 0;
+        font-size: 14px;
+        color: var(--ion-text-color);
+
+        strong {
+          font-weight: 600;
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      font-size: 14px;
+
+      &.completed {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--ion-color-success);
+        border: 1px solid var(--ion-color-success);
+      }
+
+      ion-icon {
+        font-size: 22px;
+      }
+    }
+
+    ion-button {
+      --border-radius: 12px;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+  }
+}
+
+.no-documents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--ion-text-color-secondary);
+
+  ion-icon {
+    font-size: 80px;
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-text-color-secondary);
+  }
+}
