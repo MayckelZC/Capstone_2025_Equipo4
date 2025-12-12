@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin/users"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Full Name</ion-label>
+      <ion-input formControlName="nombreCompleto" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input formControlName="nombreUsuario" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input formControlName="email" type="email" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input formControlName="password" type="password" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Phone</ion-label>
+      <ion-input formControlName="telefono" type="tel" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Address</ion-label>
+      <ion-input formControlName="direccion" [clearInput]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Is Admin</ion-label>
+      <ion-toggle slot="end" formControlName="isAdmin"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Es Veterinario</ion-label>
+      <ion-toggle slot="end" formControlName="isVeterinarian"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Is Blocked</ion-label>
+      <ion-toggle slot="end" formControlName="isBlocked" color="danger"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Es ONG</ion-label>
+      <ion-toggle slot="end" formControlName="isOrganization"></ion-toggle>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="!createUserForm.valid || loading" color="primary">
+      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+      <span *ngIf="!loading">Create User</span>
+    </ion-button>
+  </form>
+</ion-content>

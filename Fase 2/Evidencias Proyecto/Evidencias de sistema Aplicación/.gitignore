@@ -1,0 +1,106 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+*.log
+log.txt
+
+
+/.sourcemaps
+/.versions
+/coverage
+
+# Ionic
+/.ionic
+/www
+/platforms
+/plugins
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+
+# Miscellaneous
+/.angular
+/.angular/cache
+.sass-cache/
+/.nx
+/.nx/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
+# ===========================================
+# SENSITIVE FILES - DO NOT COMMIT
+# ===========================================
+
+# Environment files with credentials
+src/environments/environment.ts
+src/environments/environment.prod.ts
+
+# Keep example files
+!src/environments/environment.example.ts
+
+# Android signing keys
+*.keystore
+*.jks
+key.properties
+
+# Google Services configuration
+google-services.json
+GoogleService-Info.plist
+
+# Firebase service account keys
+*-firebase-adminsdk-*.json
+service-account*.json
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# IDE sensitive files
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf

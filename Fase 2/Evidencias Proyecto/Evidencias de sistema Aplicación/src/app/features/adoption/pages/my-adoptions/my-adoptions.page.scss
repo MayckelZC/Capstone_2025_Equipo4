@@ -1,0 +1,684 @@
+// ==========================================
+// COORDINATION BANNER
+// ==========================================
+
+.coordination-banner {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-radius: 12px 12px 0 0;
+  color: white;
+  animation: slideDown 0.3s ease-out;
+
+  .banner-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+    animation: bounce 1s infinite;
+
+    ion-icon {
+      font-size: 32px;
+    }
+  }
+
+  .banner-content {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 12px 0;
+      font-size: 13px;
+      opacity: 0.95;
+      line-height: 1.4;
+    }
+  }
+
+  .banner-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    ion-button {
+      --border-radius: 8px;
+      --box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      font-weight: 600;
+      text-transform: none;
+      font-size: 12px;
+      height: 38px;
+      flex: 1;
+      min-width: 80px;
+
+      ion-icon {
+        font-size: 18px;
+      }
+
+      &[fill="solid"][color="success"] {
+        --background: #25D366;
+        --color: white;
+      }
+
+      &[fill="solid"][color="primary"] {
+        --background: #2196F3;
+        --color: white;
+      }
+
+      &[fill="solid"][color="tertiary"] {
+        --background: #EA4335;
+        --color: white;
+      }
+    }
+  }
+}
+
+// ==========================================
+// STATS
+// ==========================================
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--ion-color-primary-tint) 0%, var(--ion-color-primary) 100%);
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  ion-icon {
+    font-size: 32px;
+  }
+
+  &.total ion-icon {
+    color: var(--ion-color-primary);
+  }
+
+  &.pending ion-icon {
+    color: var(--ion-color-warning);
+  }
+
+  &.approved ion-icon {
+    color: var(--ion-color-success);
+  }
+
+  &.rejected ion-icon {
+    color: var(--ion-color-danger);
+  }
+
+  .stat-info {
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--ion-color-dark);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+// ==========================================
+// FILTERS
+// ==========================================
+
+.filters-section {
+  padding: 16px;
+  background: white;
+  border-bottom: 1px solid var(--ion-color-light);
+
+  ion-searchbar {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    padding: 0;
+    margin-bottom: 12px;
+  }
+
+  ion-segment {
+    margin-bottom: 0;
+  }
+}
+
+// ==========================================
+// STATES
+// ==========================================
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--ion-color-medium);
+
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: var(--ion-color-medium);
+  text-align: center;
+
+  .empty-icon-container {
+    position: relative;
+    margin-bottom: 24px;
+
+    .empty-icon {
+      font-size: 100px;
+      color: var(--ion-color-light-shade);
+      display: block;
+    }
+
+    .paw-decoration {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      width: 50px;
+      height: 50px;
+      background: var(--ion-color-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      animation: bounce 2s ease-in-out infinite;
+
+      ion-icon {
+        font-size: 28px;
+        color: white;
+        margin: 0;
+        opacity: 1;
+      }
+    }
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    color: var(--ion-color-dark);
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
+
+  .explore-button {
+    --border-radius: 12px;
+    --background: var(--ion-color-primary);
+    --box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      --box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+    }
+  }
+}
+
+// ==========================================
+// REQUEST CARDS
+// ==========================================
+
+.requests-container {
+  padding: 16px;
+}
+
+.request-card {
+  margin-bottom: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--ion-color-success);
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f5f5 0%, white 100%);
+    gap: 16px;
+
+    .pet-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    .pet-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .pet-name {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--ion-color-dark);
+        cursor: pointer;
+
+        &:active {
+          color: var(--ion-color-primary);
+        }
+      }
+
+      .status-badge,
+      .new-badge {
+        align-self: flex-start;
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+
+      .new-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        ion-icon {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  ion-card-content {
+    padding: 16px;
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--ion-color-medium);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      ion-icon {
+        font-size: 18px;
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .contact-icons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--ion-color-light);
+
+      .contact-icon-btn {
+        --padding-start: 8px;
+        --padding-end: 8px;
+        margin: 0;
+        height: 40px;
+        width: 40px;
+
+        ion-icon {
+          font-size: 24px;
+        }
+
+        &:nth-child(1) ion-icon {
+          color: #666;
+        }
+
+        &:nth-child(2) ion-icon {
+          color: #007AFF;
+        }
+
+        &:nth-child(3) ion-icon {
+          color: #25D366;
+        }
+
+        &:nth-child(4) ion-icon {
+          color: #FF9500;
+        }
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 16px 16px;
+    border-top: 1px solid var(--ion-color-light);
+
+    ion-button {
+      --border-radius: 8px;
+      margin: 0;
+      flex: 1;
+      min-width: calc(50% - 4px);
+
+      &[color="success"] {
+        flex-basis: 100%;
+      }
+    }
+  }
+}
+
+// ==========================================
+// DELIVERY SECTION
+// ==========================================
+
+.delivery-section {
+  margin-top: 16px;
+  padding: 16px;
+  border-top: 2px solid #f0f0f0;
+
+  .delivery-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .delivery-status-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+
+    .status-row {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .party-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      ion-icon {
+        font-size: 32px;
+        flex-shrink: 0;
+      }
+
+      .party-info {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+
+        .party-label {
+          font-weight: 600;
+          font-size: 14px;
+          color: #333;
+        }
+
+        .party-date {
+          font-size: 12px;
+          color: #4CAF50;
+          margin-top: 2px;
+        }
+
+        .party-pending {
+          font-size: 12px;
+          color: #999;
+          margin-top: 2px;
+        }
+      }
+    }
+
+    .overall-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #666;
+
+      ion-icon {
+        font-size: 24px;
+      }
+
+      &.completed {
+        background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+        color: white;
+
+        ion-icon {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .confirm-delivery-btn {
+    margin: 0;
+    font-weight: 600;
+    --background: #4CAF50;
+    --color: white;
+    font-size: 14px;
+    height: 44px;
+  }
+}
+
+// ==========================================
+// DELIVERY CONFIRMATION
+// ==========================================
+
+.delivery-confirmation-section {
+  background: #f8f9fa;
+  padding: 16px;
+  margin: 16px 0 0 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.delivery-status-info {
+  margin-bottom: 16px;
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+  }
+}
+
+.confirmation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.confirmation-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+
+  &.confirmed {
+    border-color: #4CAF50;
+    background: #f1f8f4;
+
+    ion-icon {
+      color: #4CAF50;
+    }
+  }
+
+  ion-icon {
+    font-size: 32px;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: #666;
+  }
+
+  small {
+    font-size: 10px;
+    color: #999;
+    margin-top: 4px;
+  }
+}
+
+.delivery-confirmed-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f1f8f4;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+
+  ion-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #2e7d32;
+    font-weight: 500;
+  }
+
+  .completed-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 12px;
+    margin-top: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+
+    ion-icon {
+      font-size: 28px;
+    }
+  }
+}
+
+.receipt-section {
+  background: #e8f5e9;
+  padding: 16px;
+  margin: 16px 0 0 0;
+  border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2e7d32;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+
+  ion-button {
+    margin-top: 8px;
+  }
+}
+
+// ==========================================
+// ANIMATIONS
+// ==========================================
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-actions ion-button {
+    min-width: 100% !important;
+    flex-basis: 100% !important;
+  }
+}

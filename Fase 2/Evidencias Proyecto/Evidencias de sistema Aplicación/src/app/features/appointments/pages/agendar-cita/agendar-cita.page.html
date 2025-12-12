@@ -1,0 +1,175 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Agendar Cita Veterinaria</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <div *ngIf="isLoading" class="loading-container">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p>Cargando...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="booking-container">
+
+        <!-- SECTION 1: Pet Selector -->
+        <section class="booking-section">
+            <h3 class="section-title">
+                <ion-icon name="paw-outline"></ion-icon>
+                ¿Para qué mascota?
+            </h3>
+
+            <div class="pets-scroll" *ngIf="userPets.length > 0">
+                <div *ngFor="let pet of userPets" class="pet-card" [class.selected]="selectedPet()?.id === pet.id"
+                    (click)="selectPet(pet)">
+                    <img [src]="pet.urlImagen || 'assets/imgs/paw.png'" [alt]="pet.nombre" class="pet-photo">
+                    <div class="pet-info">
+                        <span class="pet-name">{{ pet.nombre }}</span>
+                        <span class="pet-type">{{ pet.tipoMascota | titlecase }}</span>
+                    </div>
+                    <ion-icon *ngIf="selectedPet()?.id === pet.id" name="checkmark-circle"
+                        class="check-mark"></ion-icon>
+                </div>
+            </div>
+
+            <div *ngIf="userPets.length === 0" class="no-pets">
+                <ion-icon name="paw-outline"></ion-icon>
+                <p>No tienes mascotas registradas</p>
+                <ion-button fill="outline" size="small" routerLink="/pets/publicar">Agregar mascota</ion-button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Appointment Type -->
+        <section class="booking-section" *ngIf="selectedPet()">
+            <h3 class="section-title">
+                <ion-icon name="medical-outline"></ion-icon>
+                ¿Qué necesita {{ selectedPet()?.nombre }}?
+            </h3>
+
+            <div class="types-row">
+                <div *ngFor="let type of appointmentTypes" class="type-chip"
+                    [class.selected]="selectedType()?.id === type.id"
+                    [style.--type-color]="'var(--ion-color-' + type.color + ')'" (click)="selectType(type)">
+                    <ion-icon [name]="type.icon"></ion-icon>
+                    <span class="type-name">{{ type.name }}</span>
+                    <span class="type-duration">{{ type.durationMinutes }} min</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Calendar -->
+        <section class="booking-section" *ngIf="selectedType()">
+            <h3 class="section-title">
+                <ion-icon name="calendar-outline"></ion-icon>
+                ¿Cuándo puede venir?
+            </h3>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <ion-button fill="clear" size="small" (click)="previousMonth()">
+                        <ion-icon name="chevron-back"></ion-icon>
+                    </ion-button>
+                    <span class="month-year">{{ getMonthYear() | titlecase }}</span>
+                    <ion-button fill="clear" size="small" (click)="nextMonth()">
+                        <ion-icon name="chevron-forward"></ion-icon>
+                    </ion-button>
+                </div>
+
+                <div class="calendar-weekdays">
+                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                </div>
+
+                <div class="calendar-grid">
+                    <div *ngFor="let day of calendarDays" class="calendar-day"
+                        [class.current-month]="day.isCurrentMonth" [class.today]="day.isToday"
+                        [class.selected]="day.isSelected" [class.disabled]="day.isDisabled"
+                        [class.availability-high]="day.availabilityLevel === 'high'"
+                        [class.availability-medium]="day.availabilityLevel === 'medium'"
+                        [class.availability-low]="day.availabilityLevel === 'low'" (click)="selectDay(day)">
+                        {{ day.day }}
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="selectedDate()" class="selected-date-badge">
+                <ion-icon name="checkmark-circle"></ion-icon>
+                {{ selectedDateFormatted() | titlecase }}
+            </div>
+        </section>
+
+        <!-- SECTION 4: Time Slots -->
+        <section class="booking-section" *ngIf="selectedDate()">
+            <h3 class="section-title">
+                <ion-icon name="time-outline"></ion-icon>
+                Selecciona el horario
+            </h3>
+
+            <div class="time-group" *ngIf="morningSlots.length > 0">
+                <span class="time-label">MAÑANA</span>
+                <div class="slots-row">
+                    <button *ngFor="let slot of morningSlots" class="time-slot"
+                        [class.selected]="selectedTime() === slot.time" [class.disabled]="!slot.available"
+                        [disabled]="!slot.available" (click)="selectTime(slot)">
+                        {{ slot.time }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="time-group" *ngIf="afternoonSlots.length > 0">
+                <span class="time-label">TARDE</span>
+                <div class="slots-row">
+                    <button *ngFor="let slot of afternoonSlots" class="time-slot"
+                        [class.selected]="selectedTime() === slot.time" [class.disabled]="!slot.available"
+                        [disabled]="!slot.available" (click)="selectTime(slot)">
+                        {{ slot.time }}
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="morningSlots.length === 0 && afternoonSlots.length === 0" class="no-slots">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <p>No hay horarios disponibles este día</p>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Reason (optional) -->
+        <section class="booking-section" *ngIf="selectedTime()">
+            <h3 class="section-title">
+                <ion-icon name="chatbubble-outline"></ion-icon>
+                Motivo de la consulta <span class="optional">(opcional)</span>
+            </h3>
+
+            <div class="symptom-chips">
+                <ion-chip *ngFor="let symptom of symptomChips" [outline]="true" (click)="addSymptom(symptom)">
+                    {{ symptom }}
+                </ion-chip>
+            </div>
+
+            <ion-textarea [value]="reason()" (ionInput)="updateReason($event)"
+                placeholder="Agrega detalles adicionales..." rows="3" class="reason-input">
+            </ion-textarea>
+        </section>
+    </div>
+</ion-content>
+
+<!-- Sticky Footer -->
+<ion-footer class="ion-no-border" *ngIf="!isLoading">
+    <div class="footer-container">
+        <div class="summary" *ngIf="selectedTime()">
+            <span class="summary-date">{{ selectedDateFormatted() | titlecase }}</span>
+            <span class="summary-time">{{ selectedTime() }} - {{ selectedType()?.name }}</span>
+        </div>
+
+        <ion-button expand="block" [disabled]="!canSubmit() || isSubmitting" (click)="submitAppointment()"
+            class="confirm-button">
+            <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+            <ion-icon *ngIf="!isSubmitting" name="checkmark-circle-outline" slot="start"></ion-icon>
+            <span *ngIf="!isSubmitting">Confirmar Cita</span>
+        </ion-button>
+    </div>
+</ion-footer>

@@ -1,0 +1,135 @@
+<ion-card class="pet-card" role="article" [attr.aria-label]="'Tarjeta de adopción de ' + nombre">
+    <div class="image-container">
+        <div *ngIf="status === 'available' || status === 'adopted'" class="status-badge" role="status"
+            aria-live="polite" aria-atomic="true" [attr.aria-label]="'Estado: ' + getTranslatedStatus(status)">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            {{ getTranslatedStatus(status) }}
+        </div>
+        <ion-chip *ngIf="status && status !== 'available' && status !== 'adopted'" [color]="getStatusColor(status)"
+            class="status-chip" role="status" aria-live="polite" aria-atomic="true"
+            [attr.aria-label]="'Estado: ' + getTranslatedStatus(status)">
+            <ion-label>{{ getTranslatedStatus(status) }}</ion-label>
+        </ion-chip>
+
+        <!-- Badge de fecha de publicación -->
+        <div *ngIf="createdAt" class="time-badge">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>{{ getDaysAgoText() }}</span>
+        </div>
+
+        <!-- Lazy loading de imágenes para mejor rendimiento -->
+        <img appLazyLoadImage [src]="urlImagen" [placeholder]="'assets/imgs/paw.png'"
+            [errorImage]="'assets/imgs/pixelart-dog.png'"
+            [alt]="'Foto de ' + (nombre || 'mascota sin nombre') + ', ' + tipoMascota" class="pet-image">
+
+        <ion-skeleton-text *ngIf="imageLoading" animated aria-hidden="true"></ion-skeleton-text>
+    </div>
+    <ion-card-header>
+        <div class="card-header-top">
+            <div class="title-section">
+                <ion-card-title>
+                    {{ (nombre || 'Sin nombre') | titlecase }}
+                    <ion-icon name="shield-checkmark" color="success" *ngIf="isVerified" class="verified-badge"
+                        aria-label="Verificado"></ion-icon>
+                </ion-card-title>
+                <ion-card-subtitle>
+                    <span *ngIf="raza">{{ raza | titlecase }} • </span>
+                    {{ tipoMascota | titlecase }},
+                    {{ etapaVida === 'cachorro' ? edadMeses + ' meses' : edadAnios + ' años' }}
+                </ion-card-subtitle>
+            </div>
+
+            <!-- Rating del publicador -->
+            <div *ngIf="publisherRating > 0" class="publisher-rating" role="img"
+                [attr.aria-label]="'Publicador con rating ' + publisherRating.toFixed(1) + ' estrellas'">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ publisherRating.toFixed(1) }}</span>
+            </div>
+        </div>
+
+        <div *ngIf="location" class="location-badge">
+            <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+            <span>{{ location }}</span>
+        </div>
+
+        <!-- Indicador de coincidencia de perfil -->
+        <div *ngIf="profileMatchPercentage && profileMatchPercentage > 0" class="match-indicator" role="status"
+            [attr.aria-label]="'Coincidencia de perfil: ' + profileMatchPercentage + ' por ciento'">
+            <ion-progress-bar [value]="profileMatchPercentage / 100" color="success"></ion-progress-bar>
+            <span class="match-text">{{ profileMatchPercentage }}% COINCIDE</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card-actions">
+            <ion-button *ngIf="status !== 'adopted'" fill="clear" class="action-btn" (click)="onToggleFavorite()"
+                [class.is-favorite]="isFavorite"
+                [attr.aria-label]="isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                [attr.aria-pressed]="isFavorite">
+                <ion-spinner *ngIf="isFavoriteInFlight" name="crescent" aria-hidden="true"></ion-spinner>
+                <div *ngIf="!isFavoriteInFlight" class="favorite-container">
+                    <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" aria-hidden="true"></ion-icon>
+                    <span class="favorite-count" *ngIf="favoriteCount > 0">{{ favoriteCount }}</span>
+                </div>
+            </ion-button>
+            <ion-button *ngIf="status !== 'adopted'" fill="clear" class="action-btn" (click)="onShare()"
+                aria-label="Compartir publicación">
+                <ion-icon name="share-social-outline" aria-hidden="true"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="!isOwner && status !== 'adopted'" fill="clear" class="action-btn" (click)="onReport()"
+                aria-label="Reportar publicación">
+                <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+            </ion-button>
+        </div>
+    </ion-card-header>
+    <ion-card-content>
+        <p class="description-text">{{ descripcion || 'Sin descripción disponible' }}</p>
+    </ion-card-content>
+
+    <!-- Atributos de salud y características -->
+    <div class="attributes-section" *ngIf="sexo || tamano || esterilizado || vacuna || desparasitado" role="region"
+        aria-label="Atributos y salud de la mascota">
+        <div class="key-attributes" role="list" aria-label="Atributos principales">
+            <div class="attribute-item" *ngIf="sexo" role="listitem">
+                <ion-icon [name]="sexo === 'macho' ? 'male-outline' : 'female-outline'" color="tertiary"
+                    aria-hidden="true"></ion-icon>
+                <span>{{ sexo | titlecase }}</span>
+            </div>
+            <div class="attribute-item" *ngIf="tamano" role="listitem">
+                <ion-icon name="resize-outline" color="secondary" aria-hidden="true"></ion-icon>
+                <span>{{ tamano | titlecase }}</span>
+            </div>
+            <div class="attribute-item" *ngIf="esterilizado" role="listitem">
+                <ion-icon name="heart-circle" color="success" aria-hidden="true"></ion-icon>
+                <span>Esterilizado</span>
+            </div>
+        </div>
+
+        <!-- Información de salud -->
+        <div *ngIf="vacuna || desparasitado" class="health-attributes" role="list" aria-label="Estado de salud">
+            <ion-chip *ngIf="vacuna" color="primary" size="small">
+                <ion-icon name="shield-checkmark" aria-hidden="true"></ion-icon>
+                <ion-label>Vacunado</ion-label>
+            </ion-chip>
+            <ion-chip *ngIf="desparasitado" color="warning" size="small">
+                <ion-icon name="medkit" aria-hidden="true"></ion-icon>
+                <ion-label>Desparasitado</ion-label>
+            </ion-chip>
+        </div>
+    </div>
+
+    <div class="button-container" aria-label="Acciones de adopción">
+        <ion-button expand="block" size="large" class="details-button" (click)="onDetailsClick()"
+            [attr.aria-label]="'Ver detalles completos de ' + (nombre || 'esta mascota')">
+            <ion-icon name="paw-outline" slot="start" aria-hidden="true"></ion-icon>
+            CONOCER MÁS
+            <ion-icon name="chevron-forward" slot="end" aria-hidden="true"></ion-icon>
+        </ion-button>
+        <p class="cta-hint">Incluye requisitos, tiempos estimados y contacto del cuidador.</p>
+        <ion-button *ngIf="status === 'adopted' && isOwner" expand="full" color="success"
+            class="confirm-handover-button" (click)="onConfirmHandover()"
+            [attr.aria-label]="'Confirmar que ' + nombre + ' fue entregado al adoptante'">
+            <ion-icon name="hand-right-outline" slot="start" aria-hidden="true"></ion-icon>
+            Confirmar Entrega
+        </ion-button>
+    </div>
+</ion-card>

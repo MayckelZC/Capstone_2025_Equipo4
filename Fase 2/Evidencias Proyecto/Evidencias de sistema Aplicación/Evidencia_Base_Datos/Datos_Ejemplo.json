@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "uid": "user123",
+      "email": "juan.perez@email.com",
+      "displayName": "Juan Perez",
+      "role": "adopter",
+      "createdAt": "2025-12-01T10:00:00Z"
+    },
+    {
+      "uid": "vet456",
+      "email": "dra.gonzalez@email.com",
+      "displayName": "Dra. Ana Gonzalez",
+      "role": "veterinarian",
+      "createdAt": "2025-11-15T08:30:00Z"
+    }
+  ],
+  "pets": [
+    {
+      "id": "pet001",
+      "name": "Rocky",
+      "species": "Perro",
+      "breed": "Mestizo",
+      "age": 2,
+      "size": "Mediano",
+      "status": "Disponible",
+      "sterilized": true,
+      "vaccinated": true,
+      "description": "Rocky es muy juguetón y cariñoso."
+    },
+    {
+      "id": "pet002",
+      "name": "Luna",
+      "species": "Gato",
+      "breed": "Siames",
+      "age": 1,
+      "size": "Pequeño",
+      "status": "Adoptado",
+      "sterilized": true,
+      "vaccinated": false,
+      "description": "Luna busca un hogar tranquilo."
+    }
+  ],
+  "appointments": [
+    {
+      "id": "apt789",
+      "petId": "pet001",
+      "veterinarianId": "vet456",
+      "date": "2025-12-20T15:00:00Z",
+      "type": "Vacunación",
+      "status": "Confirmada"
+    }
+  ]
+}

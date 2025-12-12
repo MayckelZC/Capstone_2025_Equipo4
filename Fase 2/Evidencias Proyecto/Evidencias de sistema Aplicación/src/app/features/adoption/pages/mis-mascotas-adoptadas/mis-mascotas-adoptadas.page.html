@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToHome()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Mascotas Adoptadas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="isLoading" class="ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando tus mascotas adoptadas...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div *ngIf="mascotasAdoptadas.length === 0" class="empty-state">
+      <div class="empty-icon-container">
+        <ion-icon name="paw-outline" size="large"></ion-icon>
+        <div class="paw-decoration"></div>
+      </div>
+      <h2>Aún no has adoptado mascotas</h2>
+      <p>Cuando adoptes una mascota, aparecerá aquí.</p>
+      <ion-button expand="block" routerLink="/pets/home" size="large" class="explore-button">
+        <ion-icon name="albums-outline" slot="start"></ion-icon>
+        Explorar Mascotas
+      </ion-button>
+    </div>
+
+    <ion-list *ngIf="mascotasAdoptadas.length > 0">
+      <ion-card *ngFor="let mascota of mascotasAdoptadas">
+        <img [src]="mascota.urlImagen" alt="Foto de la mascota" class="card-image">
+        <ion-card-content>
+          <ion-card-title>{{ mascota.nombre || 'Sin nombre' }}</ion-card-title>
+          <ion-card-subtitle>Adoptado el: {{ getFechaAdopcionFormatted(mascota) }}</ion-card-subtitle>
+          <p>{{ mascota.tipoMascota }} - {{ mascota.tamano }}</p>
+        </ion-card-content>
+
+        <div class="action-buttons">
+          <ion-button fill="clear" (click)="goToPetDetails(mascota.id)">
+            <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+            Ver Detalles
+          </ion-button>
+          <ion-button fill="clear" color="secondary" (click)="editarMascota(mascota)">
+            <ion-icon slot="start" name="create-outline"></ion-icon>
+            Editar Info
+          </ion-button>
+          <ion-button fill="clear" color="warning" (click)="agendarCita(mascota)">
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            Agendar Cita
+          </ion-button>
+        </div>
+      </ion-card>
+    </ion-list>
+  </div>
+</ion-content>
