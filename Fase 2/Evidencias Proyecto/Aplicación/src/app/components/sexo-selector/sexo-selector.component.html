@@ -1,0 +1,12 @@
+<div class="sexo-container">
+  <button 
+    [class.selected]="sexoSeleccionado === 'MACHO'"
+    (click)="seleccionarSexo('MACHO')">
+    ♂ MACHO
+  </button>
+  <button 
+    [class.selected]="sexoSeleccionado === 'HEMBRA'"
+    (click)="seleccionarSexo('HEMBRA')">
+    ♀ HEMBRA
+  </button>
+</div>

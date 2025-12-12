@@ -1,0 +1,6 @@
+<div class="notifications-container">
+  <ion-button (click)="toggleNotifications()" class="notifications-button">
+    <ion-icon name="notifications-outline"></ion-icon>
+    <ion-badge *ngIf="(unreadCount$ | async) as count" color="danger">{{ count > 9 ? '9+' : count }}</ion-badge>
+  </ion-button>
+</div>

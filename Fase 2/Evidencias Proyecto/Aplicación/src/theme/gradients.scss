@@ -1,0 +1,295 @@
+/**
+ * GRADIENTES MODERNOS - PATITAS EN CASA
+ * Gradientes mesh, glassmorphism y efectos de profundidad
+ */
+
+/* ==========================================
+   GRADIENTES MESH MODERNOS
+   ========================================== */
+
+.gradient-mesh-primary {
+    background:
+        radial-gradient(at 27% 37%, hsla(145, 70%, 50%, 1) 0px, transparent 50%),
+        radial-gradient(at 97% 21%, hsla(125, 65%, 45%, 1) 0px, transparent 50%),
+        radial-gradient(at 52% 99%, hsla(140, 75%, 55%, 1) 0px, transparent 50%),
+        radial-gradient(at 10% 29%, hsla(135, 60%, 40%, 1) 0px, transparent 50%),
+        radial-gradient(at 97% 96%, hsla(150, 68%, 48%, 1) 0px, transparent 50%),
+        radial-gradient(at 33% 50%, hsla(142, 72%, 52%, 1) 0px, transparent 50%),
+        radial-gradient(at 79% 53%, hsla(138, 66%, 46%, 1) 0px, transparent 50%);
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+}
+
+.gradient-mesh-secondary {
+    background:
+        radial-gradient(at 40% 20%, hsla(145, 60%, 55%, 0.8) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(135, 65%, 50%, 0.7) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(140, 70%, 45%, 0.6) 0px, transparent 50%),
+        radial-gradient(at 80% 50%, hsla(150, 55%, 52%, 0.5) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, hsla(142, 68%, 48%, 0.7) 0px, transparent 50%),
+        radial-gradient(at 80% 100%, hsla(138, 62%, 50%, 0.6) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, hsla(148, 65%, 47%, 0.8) 0px, transparent 50%);
+    background-size: 200% 200%;
+    animation: gradientShift 20s ease infinite alternate;
+}
+
+/* ==========================================
+   GLASSMORPHISM AVANZADO
+   ========================================== */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 8px 32px 0 rgba(31, 38, 135, 0.15),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.8),
+                transparent);
+    }
+}
+
+.glass-card-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-button {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+    }
+}
+
+/* ==========================================
+   SOMBRAS MULTICAPA PREMIUM
+   ========================================== */
+
+.shadow-sm-premium {
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.02),
+        0 2px 2px rgba(0, 0, 0, 0.02),
+        0 4px 4px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-md-premium {
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042);
+}
+
+.shadow-lg-premium {
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+}
+
+.shadow-xl-premium {
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07),
+        0 200px 160px rgba(0, 0, 0, 0.09);
+}
+
+/* Sombras con color */
+.shadow-primary {
+    box-shadow:
+        0 4px 6px -1px rgba(var(--ion-color-primary-rgb), 0.1),
+        0 2px 4px -1px rgba(var(--ion-color-primary-rgb), 0.06);
+}
+
+.shadow-primary-lg {
+    box-shadow:
+        0 10px 15px -3px rgba(var(--ion-color-primary-rgb), 0.2),
+        0 4px 6px -2px rgba(var(--ion-color-primary-rgb), 0.1);
+}
+
+.shadow-success {
+    box-shadow:
+        0 4px 6px -1px rgba(var(--ion-color-success-rgb), 0.1),
+        0 2px 4px -1px rgba(var(--ion-color-success-rgb), 0.06);
+}
+
+/* ==========================================
+   GRADIENTES LINEALES MEJORADOS
+   ========================================== */
+
+.gradient-primary {
+    background: linear-gradient(135deg,
+            var(--ion-color-primary) 0%,
+            var(--ion-color-primary-tint) 100%);
+}
+
+.gradient-primary-reverse {
+    background: linear-gradient(135deg,
+            var(--ion-color-primary-tint) 0%,
+            var(--ion-color-primary) 100%);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg,
+            var(--ion-color-success) 0%,
+            var(--ion-color-success-tint) 100%);
+}
+
+.gradient-animated {
+    background: linear-gradient(-45deg,
+            var(--ion-color-primary),
+            var(--ion-color-secondary),
+            var(--ion-color-tertiary),
+            var(--ion-color-success));
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* ==========================================
+   OVERLAYS Y MÁSCARAS
+   ========================================== */
+
+.overlay-gradient-top {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(180deg,
+                rgba(0, 0, 0, 0.6) 0%,
+                rgba(0, 0, 0, 0.3) 50%,
+                transparent 100%);
+        pointer-events: none;
+    }
+}
+
+.overlay-gradient-bottom {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(0deg,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                transparent 100%);
+        pointer-events: none;
+    }
+}
+
+.overlay-primary {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg,
+                rgba(var(--ion-color-primary-rgb), 0.1) 0%,
+                rgba(var(--ion-color-secondary-rgb), 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    &:hover::before {
+        opacity: 1;
+    }
+}
+
+/* ==========================================
+   EFECTOS DE BRILLO Y RESPLANDOR
+   ========================================== */
+
+.glow-primary {
+    box-shadow: 0 0 20px rgba(var(--ion-color-primary-rgb), 0.5);
+}
+
+.glow-success {
+    box-shadow: 0 0 20px rgba(var(--ion-color-success-rgb), 0.5);
+}
+
+.glow-animated {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(var(--ion-color-primary-rgb), 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(var(--ion-color-primary-rgb), 0.6);
+    }
+}
+
+/* ==========================================
+   PATRONES DE FONDO
+   ========================================== */
+
+.pattern-dots {
+    background-image: radial-gradient(circle,
+            rgba(var(--ion-color-primary-rgb), 0.1) 1px,
+            transparent 1px);
+    background-size: 20px 20px;
+}
+
+.pattern-grid {
+    background-image:
+        linear-gradient(rgba(var(--ion-color-primary-rgb), 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--ion-color-primary-rgb), 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.pattern-diagonal {
+    background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(var(--ion-color-primary-rgb), 0.05) 10px,
+            rgba(var(--ion-color-primary-rgb), 0.05) 20px);
+}
+
+/* ==========================================
+   MODO OSCURO
+   ========================================== */

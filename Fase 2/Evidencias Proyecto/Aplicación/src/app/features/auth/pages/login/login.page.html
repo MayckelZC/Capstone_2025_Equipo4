@@ -1,0 +1,119 @@
+<ion-content>
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Enhanced Logo Section -->
+    <div class="logo-section">
+      <div class="logo-container">
+        <img src="assets/imgs/logo.png" alt="Logo de la aplicación" />
+        <div class="logo-glow"></div>
+      </div>
+      <h1 class="app-title">PatitasEnCasa</h1>
+      <p class="app-subtitle">Conectando corazones peludos</p>
+    </div>
+
+    <!-- Modern Login Card -->
+    <div class="login-card">
+      <div class="card-header">
+        <h2 class="welcome-title">¡Bienvenido de vuelta!</h2>
+        <p class="welcome-subtitle">Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <form (ngSubmit)="login()" class="login-form">
+        <!-- Email/Username Input -->
+        <div class="input-group">
+          <div class="input-container">
+            <label class="sr-only" for="login-identifier">Correo o usuario</label>
+            <ion-icon name="person-circle" class="input-icon"></ion-icon>
+            <ion-input 
+              [(ngModel)]="identifier" 
+              name="identifier" 
+              id="login-identifier"
+              type="text" 
+              placeholder="Correo o usuario"
+              required 
+              autocomplete="username"
+              spellcheck="false" 
+              [clearInput]="true"
+              class="modern-input"
+              aria-required="true">
+            </ion-input>
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="input-group">
+          <div class="input-container">
+            <label class="sr-only" for="login-password">Contraseña</label>
+            <ion-icon name="lock-closed" class="input-icon"></ion-icon>
+            <ion-input 
+              [(ngModel)]="password" 
+              name="password" 
+              id="login-password"
+              [type]="passwordType" 
+              placeholder="Contraseña"
+              required 
+              autocomplete="current-password"
+              [clearInput]="true"
+              class="modern-input"
+              aria-required="true">
+            </ion-input>
+            <ion-button fill="clear" class="password-toggle-btn" (click)="togglePasswordVisibility()" aria-label="Mostrar u ocultar contraseña" [attr.aria-pressed]="passwordType === 'text'">
+              <ion-icon [name]="passwordToggleIcon" class="password-toggle"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Keep Session Checkbox -->
+        <div class="checkbox-container">
+          <ion-checkbox 
+            [(ngModel)]="keepSession" 
+            name="keepSession"
+            class="custom-checkbox">
+          </ion-checkbox>
+          <ion-label class="checkbox-label">Mantener sesión iniciada</ion-label>
+        </div>
+
+        <!-- Login Button -->
+        <ion-button expand="block" type="submit" class="login-button" [disabled]="loading">
+          <ion-spinner *ngIf="loading" name="crescent" class="button-spinner"></ion-spinner>
+          <span *ngIf="!loading" class="button-text">
+            <ion-icon name="log-in" class="button-icon"></ion-icon>
+            Iniciar Sesión
+          </span>
+        </ion-button>
+      </form>
+
+      <!-- Action Links -->
+      <div class="action-links">
+        <a (click)="navigateToResetPassword()" class="forgot-password">
+          <ion-icon name="help-circle-outline"></ion-icon>
+          ¿Olvidaste tu contraseña?
+        </a>
+        
+        <div class="register-section">
+          <span class="register-text">¿Eres nuevo?</span>
+          <a (click)="register()" class="register-link">
+            <ion-icon name="person-add-outline"></ion-icon>
+            Crear cuenta
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="bottom-decoration">
+      <ion-icon name="paw" class="paw-icon paw-1"></ion-icon>
+      <ion-icon name="heart" class="paw-icon paw-2"></ion-icon>
+      <ion-icon name="paw" class="paw-icon paw-3"></ion-icon>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Documentos de Adopción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="documents-container" *ngIf="documents$ | async as documents; else loading">
+    
+    <!-- Commitment Documents -->
+    <div class="document-section" *ngIf="documents.commitments.length > 0">
+      <h2>
+        <ion-icon name="document-text"></ion-icon>
+        Compromisos de Adopción
+      </h2>
+      <ion-card *ngFor="let doc of documents.commitments" class="document-card commitment-card">
+        <ion-card-header>
+          <ion-card-subtitle>
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ formatDate(doc.signatureDate) }}
+          </ion-card-subtitle>
+          <ion-card-title>Compromiso del Adoptante</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="doc-info">
+            <p><strong>Adoptante:</strong> {{ doc.adopteeName }}</p>
+            <p><strong>Mascota:</strong> {{ doc.petName }}</p>
+          </div>
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            (click)="openPdf(doc.pdfUrl)"
+            [color]="getDocumentColor('commitment')"
+          >
+            <ion-icon name="download" slot="start"></ion-icon>
+            Ver Documento PDF
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Handover Agreements -->
+    <div class="document-section" *ngIf="documents.agreements.length > 0">
+      <h2>
+        <ion-icon name="document-attach"></ion-icon>
+        Acuerdos de Entrega
+      </h2>
+      <ion-card *ngFor="let doc of documents.agreements" class="document-card agreement-card">
+        <ion-card-header>
+          <ion-card-subtitle>
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ formatDate(doc.approvalDate) }}
+          </ion-card-subtitle>
+          <ion-card-title>Acuerdo de Entrega</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="doc-info">
+            <p><strong>Dueño Original:</strong> {{ doc.ownerName }}</p>
+            <p><strong>Adoptante:</strong> {{ doc.adopteeName }}</p>
+            <p><strong>Mascota:</strong> {{ doc.petName }}</p>
+            <p><strong>Estado de Salud:</strong> {{ doc.petHealthStatus }}</p>
+          </div>
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            (click)="openPdf(doc.pdfUrl)"
+            [color]="getDocumentColor('handover-agreement')"
+          >
+            <ion-icon name="download" slot="start"></ion-icon>
+            Ver Documento PDF
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Delivery Receipts -->
+    <div class="document-section" *ngIf="documents.receipts.length > 0">
+      <h2>
+        <ion-icon name="receipt"></ion-icon>
+        Recibos de Entrega
+      </h2>
+      <ion-card *ngFor="let doc of documents.receipts" class="document-card receipt-card">
+        <ion-card-header>
+          <ion-card-subtitle>
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ formatDate(doc.deliveryDate) }}
+          </ion-card-subtitle>
+          <ion-card-title>Recibo No. {{ doc.receiptNumber }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="doc-info">
+            <p><strong>Dueño Original:</strong> {{ doc.ownerName }}</p>
+            <p><strong>Confirmado:</strong> {{ formatDate(doc.ownerConfirmedDate) }}</p>
+            <p><strong>Adoptante:</strong> {{ doc.adopteeName }}</p>
+            <p><strong>Confirmado:</strong> {{ formatDate(doc.adopteeConfirmedDate) }}</p>
+            <p><strong>Lugar:</strong> {{ doc.deliveryLocation }}</p>
+          </div>
+          
+          <div class="status-badge completed">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            Adopción Completada
+          </div>
+
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            (click)="openPdf(doc.pdfUrl)"
+            [color]="getDocumentColor('handover-receipt')"
+          >
+            <ion-icon name="download" slot="start"></ion-icon>
+            Ver Recibo PDF
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- No documents -->
+    <div class="no-documents" *ngIf="documents.commitments.length === 0 && documents.agreements.length === 0 && documents.receipts.length === 0">
+      <ion-icon name="document-outline"></ion-icon>
+      <h3>No hay documentos disponibles</h3>
+      <p>Los documentos de adopción aparecerán aquí cuando se generen.</p>
+    </div>
+
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando documentos...</p>
+    </div>
+  </ng-template>
+</ion-content>

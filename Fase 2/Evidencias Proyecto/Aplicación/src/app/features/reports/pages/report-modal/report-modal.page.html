@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Reportar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="report-modal ion-padding">
+  <ion-card class="report-form-card">
+    <ion-card-header>
+      <ion-card-title>Ayúdanos a mantener la comunidad segura</ion-card-title>
+      <ion-card-subtitle>Selecciona un motivo y agrega detalles si es necesario.</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="reportForm" (ngSubmit)="submitReport()" novalidate>
+        <section *ngIf="reportedItem" class="reported-preview" aria-live="polite">
+          <ion-item lines="none">
+            <ion-thumbnail slot="start">
+              <img [src]="reportedItem.urlImagen || 'assets/imgs/default-dog.png'" [alt]="reportedItem.nombre || 'Mascota reportada'" />
+            </ion-thumbnail>
+            <ion-label>
+              <div class="preview-top">
+                <h3>{{ reportedItem.nombre }}</h3>
+                <ion-chip *ngIf="reportedItem.tipoMascota" color="success" size="small">
+                  <ion-icon name="paw-outline"></ion-icon>
+                  <ion-label>{{ reportedItem.tipoMascota | titlecase }}</ion-label>
+                </ion-chip>
+              </div>
+              <p class="muted">Publicado por <strong>{{ publisherName || reportedItem.creadorId }}</strong></p>
+              <div class="preview-meta">
+                <span *ngIf="reportedItem.etapaVida === 'cachorro'">{{ reportedItem.edadMeses || 'N/A' }} meses</span>
+                <span *ngIf="reportedItem.etapaVida !== 'cachorro'">{{ reportedItem.edadAnios || 'N/A' }} años</span>
+                <span *ngIf="reportedItem.location">· {{ reportedItem.location }}</span>
+              </div>
+            </ion-label>
+          </ion-item>
+        </section>
+
+        <ion-note *ngIf="!userAuthenticated" color="warning" class="status-banner" aria-live="polite">
+          Debes iniciar sesión para completar un reporte.
+        </ion-note>
+        <ion-note *ngIf="isSelfReport" color="medium" class="status-banner" aria-live="polite">
+          No puedes reportar tu propia publicación ni reportarte a ti mismo.
+        </ion-note>
+
+        <ion-list lines="none" class="reason-list" aria-label="Motivo del reporte">
+          <ion-list-header>
+            <ion-label>Motivo del reporte</ion-label>
+          </ion-list-header>
+          <ion-radio-group formControlName="reason">
+            <ion-item
+              *ngFor="let reason of reasonOptions; trackBy: trackReason"
+              lines="none"
+              button="true"
+              class="reason-item"
+              [class.selected]="selectedReason === reason.value"
+              detail="false"
+            >
+              <ion-radio slot="start" [value]="reason.value" aria-hidden="true"></ion-radio>
+              <ion-label>
+                <div class="reason-title">
+                  <ion-icon [name]="reason.icon" [color]="reason.color"></ion-icon>
+                  <span>{{ reason.title }}</span>
+                </div>
+                <div class="reason-desc">{{ reason.description }}</div>
+              </ion-label>
+              <ion-icon slot="end" name="chevron-forward-outline" class="chevron"></ion-icon>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+
+        <div class="details-field">
+          <div class="field-label">
+            <ion-label>Detalles adicionales <span>(opcional)</span></ion-label>
+            <ion-text [color]="nearLimit ? 'warning' : 'medium'" aria-live="polite">
+              {{ remainingCharacters }} caracteres restantes
+            </ion-text>
+          </div>
+          <ion-textarea
+            formControlName="details"
+            rows="4"
+            [maxlength]="maxLength"
+            placeholder="Describe aquí el motivo del reporte..."
+            [clearOnEdit]="true"
+            auto-grow="true"
+          ></ion-textarea>
+        </div>
+
+        <div class="actions">
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="reportForm.invalid || loading || !userAuthenticated || isSelfReport"
+            class="primary-cta"
+          >
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">Enviar reporte</span>
+            <ion-icon *ngIf="!loading" slot="end" name="send"></ion-icon>
+          </ion-button>
+
+          <ion-button expand="block" fill="clear" color="medium" (click)="closeModal()">
+            Cancelar
+          </ion-button>
+
+          <ion-button *ngIf="!userAuthenticated" expand="block" color="tertiary" fill="outline" (click)="goToLogin()">
+            Iniciar sesión para reportar
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

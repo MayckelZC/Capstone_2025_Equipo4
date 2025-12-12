@@ -1,0 +1,223 @@
+<ion-header>
+  <ion-toolbar color="primary" class="admin-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/pets/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Dashboard Administrativo</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <!-- SECCIÓN: Métricas Principales -->
+    <ion-row>
+      <ion-col size="12">
+        <h2 class="section-title animate-fade-in">Métricas Principales</h2>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card users-card interactive-card animate-fade-in-up" [routerLink]="['/admin/users']">
+          <ion-card-header>
+            <ion-card-subtitle>Usuarios Registrados</ion-card-subtitle>
+            <ion-card-title>{{ userCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="people-outline"></ion-icon>
+            <p class="summary-text">{{ newUsersThisWeekCount$ | async }} nuevos esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card pets-card interactive-card animate-fade-in-up" [routerLink]="['/admin/pets']"
+          style="animation-delay: 0.1s;">
+          <ion-card-header>
+            <ion-card-subtitle>Mascotas Publicadas</ion-card-subtitle>
+            <ion-card-title>{{ petCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="paw-outline"></ion-icon>
+            <p class="summary-text">{{ newPetsThisWeekCount$ | async }} nuevas esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card adoptions-card interactive-card animate-fade-in-up"
+          [routerLink]="['/admin/adoption-requests']" style="animation-delay: 0.2s;">
+          <ion-card-header>
+            <ion-card-subtitle>Adopciones Exitosas</ion-card-subtitle>
+            <ion-card-title>{{ adoptionCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="heart-outline"></ion-icon>
+            <p class="summary-text">{{ newAdoptionsThisWeekCount$ | async }} nuevas esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="3">
+        <ion-card class="dashboard-card reports-card interactive-card animate-fade-in-up"
+          [routerLink]="['/admin/reports']" style="animation-delay: 0.3s;">
+          <ion-card-header>
+            <ion-card-subtitle>Reportes Pendientes</ion-card-subtitle>
+            <ion-card-title>{{ reportCount$ | async }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <p class="summary-text">{{ newReportsThisWeekCount$ | async }} nuevos esta semana</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- SECCIÓN: Gráficas y Estadísticas -->
+    <ion-row class="charts-section">
+      <ion-col size="12">
+        <h2 class="section-title animate-fade-in">Estadísticas y Tendencias</h2>
+      </ion-col>
+
+      <!-- Gráfica de Crecimiento de Usuarios -->
+      <ion-col size="12" size-lg="6">
+        <ion-card class="chart-card glass-card animate-scale-in">
+          <ion-card-header>
+            <ion-card-title class="gradient-text">Crecimiento de Usuarios</ion-card-title>
+            <ion-card-subtitle>Últimos 6 meses</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <canvas #userGrowthChart></canvas>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Gráfica de Adopciones -->
+      <ion-col size="12" size-lg="6">
+        <ion-card class="chart-card glass-card animate-scale-in" style="animation-delay: 0.1s;">
+          <ion-card-header>
+            <ion-card-title class="gradient-text">Tendencia de Adopciones</ion-card-title>
+            <ion-card-subtitle>Últimos 6 meses</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <canvas #adoptionTrendsChart></canvas>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Gráfica de Mascotas por Especie -->
+      <ion-col size="12" size-md="6">
+        <ion-card class="chart-card glass-card animate-scale-in" style="animation-delay: 0.2s;">
+          <ion-card-header>
+            <ion-card-title class="gradient-text">Mascotas por Especie</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container" style="height: 280px;">
+              <canvas #petsBySpeciesChart></canvas>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Gráfica de Reportes por Tipo -->
+      <ion-col size="12" size-md="6">
+        <ion-card class="chart-card glass-card animate-scale-in" style="animation-delay: 0.3s;">
+          <ion-card-header>
+            <ion-card-title class="gradient-text">Reportes por Tipo</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <canvas #reportsByTypeChart></canvas>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- SECCIÓN: Actividad Reciente -->
+    <ion-row class="activity-section">
+      <ion-col size="12">
+        <h2 class="section-title animate-fade-in">Actividad Reciente</h2>
+      </ion-col>
+
+      <ion-col size="12" size-lg="6">
+        <ion-card class="activity-card glass-card animate-fade-in-up">
+          <ion-card-header>
+            <ion-card-title>Últimos Usuarios Registrados</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list *ngIf="((recentUsers$ | async)?.length ?? 0) > 0; else noUsers">
+              <ion-item *ngFor="let user of recentUsers$ | async" class="user-item">
+                <ion-avatar slot="start">
+                  <img
+                    [src]="user.photoURL || 'https://ui-avatars.com/api/?name=' + (user.nombreCompleto || 'Usuario') + '&background=4CAF50&color=fff&size=128'"
+                    [alt]="user.nombreCompleto"
+                    (error)="$any($event.target).src='https://ui-avatars.com/api/?name=U&background=4CAF50&color=fff&size=128'" />
+                </ion-avatar>
+                <ion-label>
+                  <h3>{{ user.nombreCompleto }}</h3>
+                  <p>{{ user.email }}</p>
+                  <p class="date-text">{{ user.createdAt | firebaseTimestamp | date:'short' }}</p>
+                </ion-label>
+                <ion-badge *ngIf="user.isAdmin" slot="end" color="primary">Admin</ion-badge>
+              </ion-item>
+            </ion-list>
+            <ng-template #noUsers>
+              <p class="no-data-text">No hay usuarios recientes</p>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-lg="6">
+        <ion-card class="activity-card glass-card animate-fade-in-up" style="animation-delay: 0.1s;">
+          <ion-card-header>
+            <ion-card-title>Acciones Rápidas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list class="quick-actions-list">
+              <ion-item button [routerLink]="['/admin/users']" class="action-item">
+                <ion-icon name="people-outline" slot="start" color="primary"></ion-icon>
+                <ion-label>
+                  <h3>Administrar Usuarios</h3>
+                  <p>Gestionar usuarios del sistema</p>
+                </ion-label>
+                <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+              </ion-item>
+
+              <ion-item button [routerLink]="['/admin/pets']" class="action-item">
+                <ion-icon name="paw-outline" slot="start" color="success"></ion-icon>
+                <ion-label>
+                  <h3>Administrar Mascotas</h3>
+                  <p>Gestionar publicaciones de mascotas</p>
+                </ion-label>
+                <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+              </ion-item>
+
+              <ion-item button [routerLink]="['/admin/reports']" class="action-item">
+                <ion-icon name="alert-circle-outline" slot="start" color="warning"></ion-icon>
+                <ion-label>
+                  <h3>Ver Reportes</h3>
+                  <p>Gestionar reportes pendientes</p>
+                </ion-label>
+                <ion-badge color="danger" slot="end">{{ reportCount$ | async }}</ion-badge>
+              </ion-item>
+
+              <ion-item button [routerLink]="['/admin/adoption-requests']" class="action-item">
+                <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
+                <ion-label>
+                  <h3>Solicitudes de Adopción</h3>
+                  <p>Ver y gestionar adopciones</p>
+                </ion-label>
+                <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+              </ion-item>>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

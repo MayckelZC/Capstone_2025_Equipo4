@@ -1,0 +1,295 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ========== HELPER FUNCTIONS ==========
+    
+    // Check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // ========== VALIDATION FUNCTIONS ==========
+    
+    // User validation rules
+    function validateUser(data) {
+      return data.email != null &&
+             data.email.size() > 0 &&
+             data.email.size() <= 254 &&
+             data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') &&
+             data.name != null &&
+             data.name.size() >= 2 &&
+             data.name.size() <= 100 &&
+             (!('phone' in data) || data.phone.size() <= 20) &&
+             (!('city' in data) || data.city.size() <= 100) &&
+             (!('bio' in data) || data.bio.size() <= 500);
+    }
+
+    // Pet validation rules
+    function validatePet(data) {
+      return data.name != null &&
+             data.name.size() >= 2 &&
+             data.name.size() <= 100 &&
+             data.species != null &&
+             data.species in ['perro', 'gato', 'conejo', 'otro'] &&
+             data.breed != null &&
+             data.breed.size() >= 2 &&
+             data.breed.size() <= 100 &&
+             data.age != null &&
+             data.age >= 0 &&
+             data.age <= 50 &&
+             data.weight != null &&
+             data.weight >= 0.1 &&
+             data.weight <= 200 &&
+             (!('description' in data) || data.description.size() <= 2000) &&
+             (!('location' in data) || data.location.size() <= 500) &&
+             (!('status' in data) || data.status in ['available', 'adopted', 'reserved', 'pending']);
+    }
+
+    // Adoption request validation rules
+    function validateAdoptionRequest(data) {
+      return data.reason != null &&
+             data.reason.size() >= 10 &&
+             data.reason.size() <= 1000 &&
+             data.petExperience != null &&
+             data.petExperience.size() >= 10 &&
+             data.petExperience.size() <= 1000 &&
+             data.homeType != null &&
+             data.homeType in ['apartment', 'house', 'farm', 'other'] &&
+             data.homeSize != null &&
+             data.homeSize >= 10 &&
+             data.homeSize <= 10000 &&
+             (!('otherPetsCount' in data) || (data.otherPetsCount >= 0 && data.otherPetsCount <= 20)) &&
+             (!('status' in data) || data.status in ['pending', 'approved', 'rejected', 'withdrawn']);
+    }
+
+    // Message validation rules
+    function validateMessage(data) {
+      return data.content != null &&
+             data.content.size() >= 1 &&
+             data.content.size() <= 5000 &&
+             data.senderId != null &&
+             data.conversationId != null;
+    }
+
+    // Vet appointment validation rules
+    function validateVetAppointment(data) {
+      return data.date != null &&
+             data.time != null &&
+             data.time.matches('^([0-1][0-9]|2[0-3]):[0-5][0-9]$') &&
+             data.type != null &&
+             data.type in ['checkup', 'vaccination', 'surgery', 'grooming', 'consultation'] &&
+             (!('reason' in data) || data.reason.size() <= 500);
+    }
+
+    // Report validation rules
+    function validateReport(data) {
+      return data.type != null &&
+             data.type in ['abuse', 'fraud', 'inappropriate', 'other'] &&
+             data.description != null &&
+             data.description.size() >= 20 &&
+             data.description.size() <= 2000 &&
+             (!('evidence' in data) || data.evidence.size() <= 5000);
+    }
+
+    // Allow users to read their own user data
+    // Allow authenticated users to read other users' basic information (for publisher details)
+    // Allow list operations for username verification during registration (no auth required)
+    // Allow authenticated users to create their own user data
+    // Allow admins to read, update, and delete any user
+    match /users/{userId} {
+      allow get: if request.auth != null;
+      allow list: if true;
+      allow create: if validateUser(request.resource.data);
+      allow update: if request.auth != null && 
+                       (request.auth.uid == userId || isAdmin()) &&
+                       validateUser(request.resource.data);
+      allow delete: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Allow public read access to pets (for home page)
+    // Allow authenticated users to create new pets
+    // Allow users to update or delete their own pets
+    // Allow admins to update or delete any pet
+    // Allow adopters to update pet when completing adoption
+    match /mascotas/{mascotaId} {
+      allow get, list: if true;
+      allow create: if request.auth != null && validatePet(request.resource.data);
+      allow update: if request.auth != null && 
+                       (resource.data.creadorId == request.auth.uid || 
+                        isAdmin() ||
+                        (request.resource.data.status == 'adopted' && request.resource.data.currentOwnerId == request.auth.uid)) &&
+                       validatePet(request.resource.data);
+      allow delete: if request.auth != null && (resource.data.creadorId == request.auth.uid || isAdmin());
+    }
+
+    // Allow users to read and write to their own favorites list.
+    match /users/{userId}/favorites/{mascotaId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Rules for the 'reports' collection
+    match /reports/{reportId} {
+      allow create: if request.auth != null && validateReport(request.resource.data);
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Rules for the 'medicalRecords' collection
+    match /medicalRecords/{recordId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Rules for the 'medical-records' collection
+    match /medical-records/{recordId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Rules for conversations
+    match /conversations/{conversationId} {
+      allow create: if request.auth != null && 
+        request.resource.data.participants.hasAny([request.auth.uid]);
+      
+      allow get: if request.auth != null && 
+        (conversationId.matches('.*_' + request.auth.uid + '_.*') || 
+         conversationId.matches('^' + request.auth.uid + '_.*') ||
+         conversationId.matches('.*_' + request.auth.uid + '$'));
+      
+      allow list: if request.auth != null && 
+        resource.data.participants.hasAny([request.auth.uid]);
+      
+      allow update: if request.auth != null && 
+        resource.data.participants.hasAny([request.auth.uid]) &&
+        request.resource.data.participants == resource.data.participants;
+      
+      allow delete: if false; // No permitir borrado de conversaciones
+    }
+
+    // Rules for messages in conversations
+    match /conversations/{conversationId}/messages/{messageId} {
+      allow create: if request.auth != null && 
+                       (request.resource.data.senderId == request.auth.uid || request.resource.data.senderId == 'SYSTEM') &&
+                       validateMessage(request.resource.data);
+      
+      allow read: if request.auth != null;
+      
+      allow update: if request.auth != null && 
+                       resource.data.senderId == request.auth.uid &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead', 'readAt', 'reactions']);
+      
+      allow delete: if false;
+    }
+
+    // Rules for conversation participants
+    match /conversations/{conversationId}/participants/{userId} {
+      allow read: if request.auth != null && 
+        (userId == request.auth.uid || 
+         get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants.hasAny([request.auth.uid]));
+      
+      allow create, update: if request.auth != null && 
+        userId == request.auth.uid &&
+        get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants.hasAny([request.auth.uid]);
+      
+      allow delete: if false; // No permitir borrado de participantes
+    }
+
+    // Rules for user conversation metadata
+    match /users/{userId}/conversations/{otherUserId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Rules for adoption requests
+    match /adoption-requests/{requestId} {
+      allow read, create: if request.auth != null && validateAdoptionRequest(request.resource.data);
+      // Allow applicant or creator to update
+      allow update: if request.auth != null && 
+                       (resource.data.applicantId == request.auth.uid || 
+                        resource.data.creatorId == request.auth.uid ||
+                        isAdmin()) &&
+                       validateAdoptionRequest(request.resource.data);
+      allow delete: if request.auth != null && (
+        resource.data.applicantId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // Rules for adoption history
+    match /adoption-history/{historyId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && isAdmin();
+    }
+
+    // Rules for veterinary appointments
+    match /veterinaryAppointments/{appointmentId} {
+      allow read, create, update, delete: if request.auth != null && validateVetAppointment(request.resource.data);
+    }
+
+    // Rules for veterinary consultations
+    match /consultations/{consultationId} {
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.veterinarianId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.veterinarianId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // Rules for adoption commitment documents
+    match /adoption-commitments/{commitmentId} {
+      allow read: if request.auth != null && (
+        resource.data.adopterId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null && request.resource.data.adopterId == request.auth.uid;
+      allow update, delete: if false; // Immutable once created
+    }
+
+    // Rules for adoption handover agreements
+    match /adoption-handover-agreements/{agreementId} {
+      allow read: if request.auth != null && (
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.adopteeId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable once created
+    }
+
+    // Rules for adoption delivery receipts
+    match /adoption-receipts/{receiptId} {
+      allow read: if request.auth != null && (
+        resource.data.owner.id == request.auth.uid ||
+        resource.data.adopter.id == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable once created
+    }
+
+    // Rules for notifications
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Rules for user notification preferences
+    match /user_notification_preferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
